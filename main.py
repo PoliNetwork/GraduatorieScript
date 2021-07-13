@@ -36,10 +36,10 @@ def addLink(link):
 def filterLink(soup, url):
     url = str(url)
 
-    new_soup = BeautifulSoup('<link rel="stylesheet" href="%s" type="text/css">' % '../style/ateneo2014.css.jsp',
+    new_soup = BeautifulSoup('<link rel="stylesheet" href="%s" type="text/css">' % '../style/ateneo2014.css',
                              features="html.parser")
     soup.head.insert(0, new_soup)
-    new_soup2 = BeautifulSoup('<link rel="stylesheet" href="%s" type="text/css">' % '../style/desktop.css.jsp',
+    new_soup2 = BeautifulSoup('<link rel="stylesheet" href="%s" type="text/css">' % '../style/desktop.css',
                               features="html.parser")
     soup.head.insert(0, new_soup2)
     new_soup3 = BeautifulSoup('<link rel="stylesheet" href="%s" type="text/css">' % '../style/graduatorie.css',
