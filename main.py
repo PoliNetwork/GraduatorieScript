@@ -184,7 +184,7 @@ def downloadAndAddChildrenUrl(url, start, base_output, i_url, only_first):
 
         if file_to_write is not None:
             if path is not None:
-                with open(path, "w", "utf-8") as file:
+                with open(path, "w", encoding='utf-8') as file:
                     file.write(str(file_to_write))
 
         i = i + 1
@@ -256,7 +256,7 @@ def generateUrl(start):
 
 def write_html(html, base_output):
     path = base_output + "/index.html"
-    with open(path, "w", "utf-8") as file:
+    with open(path, "w", encoding='utf-8') as file:
         file.write(str(html))
     pass
 
