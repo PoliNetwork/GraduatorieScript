@@ -310,7 +310,7 @@ if __name__ == '__main__':
 
     start = "http://www.risultati-ammissione.polimi.it"
     base_output = ""
-    if sys.arvg is None or len(sys.argv) < 2 or sys.argv[1] is None:
+    if sys.argv is None or len(sys.argv) < 2 or sys.argv[1] is None:
         base_output = "D:\\git\\Polimi\\polinetwork.github.io\\graduatorie"
     else:
         base_output = sys.argv[1]
