@@ -6,6 +6,7 @@ import urllib.request
 from bs4 import BeautifulSoup
 import datetime
 import codecs
+import sys
 
 try:
     from urllib.parse import urlparse, urljoin
@@ -308,7 +309,11 @@ if __name__ == '__main__':
     global url_global
 
     start = "http://www.risultati-ammissione.polimi.it"
-    base_output = "D:\\git\\Polimi\\polinetwork.github.io\\graduatorie"
+    base_output = ""
+    if sys.arvg is None or len(sys.argv) < 2 or sys.argv[1] is None:
+        base_output = "D:\\git\\Polimi\\polinetwork.github.io\\graduatorie"
+    else:
+        base_output = sys.argv[1]
     start_len = len(start)
 
     generateUrl(start)
