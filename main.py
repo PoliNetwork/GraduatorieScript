@@ -54,6 +54,9 @@ def filterLink(soup, url):
     if url.endswith("_generale.html"):
         soup.select_one(".titolo").decompose()
         soup.select_one(".BoxInfoCard").decompose()
+        new_soup4 = BeautifulSoup("<a href='./../'>Go to homepage</a>",
+                                  features="html.parser")
+        soup.select_one(".TablePage").insert(0, new_soup5)
 
         pass
     elif "_indice.html" in url and "sotto_indice.html" not in url:
@@ -197,7 +200,7 @@ def executeDownload(url, i, start, base_output, only_first):
     global to_download
     global success_download
 
-    time.sleep(3)
+    time.sleep(1)
 
     to_download = []
     success_download = 0
@@ -224,6 +227,7 @@ def generateUrl(start):
     now = datetime.datetime.now()
     year = int(now.year)
     kl = [8, 40, 41, 42, 64, 91, 102, 103]
+    kl = range(0,201) #todo: remove later
 
     i = 2018
     while i <= year:
