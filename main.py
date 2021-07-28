@@ -31,8 +31,8 @@ def addLink(link):
             return
         j = j + 1
 
-    elem = {"url": link}
-    to_download.append(elem)
+    elem2 = {"url": link}
+    to_download.append(elem2)
 
 
 def filterLink(soup, url):
@@ -104,17 +104,17 @@ def getFase(soup):
     pass
 
 
-def downloadAndAddChildrenUrl1(i, start, i_url):
+def downloadAndAddChildrenUrl1(i2, start2, i_url):
     global url_global
     global success_download
 
-    elem = to_download[i]
-    url = elem["url"]
+    elem2 = to_download[i2]
+    url = elem2["url"]
     try:
         soup = BeautifulSoup(urllib.request.urlopen(url), features="html.parser")
         soup = filterLink(soup, url)
-        to_download[i]["content"] = soup
-        if i == 0:
+        to_download[i2]["content"] = soup
+        if i2 == 0:
             url_global[i_url]["corso"] = getCorso(soup)
             url_global[i_url]["fase"] = getFase(soup)
 
@@ -122,7 +122,7 @@ def downloadAndAddChildrenUrl1(i, start, i_url):
             success_download += 1
             for link in soup.find_all('a', href=True):
                 link = urljoin(url, link["href"])
-                if link.startswith(start):
+                if link.startswith(start2):
                     addLink(link)
                 else:
                     print("Link not valid! " + link + "\n")
@@ -132,8 +132,8 @@ def downloadAndAddChildrenUrl1(i, start, i_url):
     pass
 
 
-def directoryOutput(url, base_output, start_len, return_first_folder):
-    url2 = url[start_len:]
+def directoryOutput(url, base_output2, start_len2, return_first_folder):
+    url2 = url[start_len2:]
     url3 = url2.split("/")
 
     if len(url3) == 0:
@@ -145,58 +145,58 @@ def directoryOutput(url, base_output, start_len, return_first_folder):
     if len(url3) == 0:
         return None
 
-    path = base_output
+    path2 = base_output2
     j = 0
     while j < (len(url3) - 1):
-        path = path + "/" + url3[j]
+        path2 = path2 + "/" + url3[j]
 
         if return_first_folder:
-            return path, url3[0]
+            return path2, url3[0]
 
-        if os.path.isdir(path):
+        if os.path.isdir(path2):
             pass
         else:
-            os.makedirs(path)
+            os.makedirs(path2)
 
         j = j + 1
 
-    return path + "/" + url3[len(url3) - 1], url3[0]
+    return path2 + "/" + url3[len(url3) - 1], url3[0]
 
 
-def downloadAndAddChildrenUrl(url, start, base_output, i_url, only_first):
-    elem = {"url": url}
-    to_download.append(elem)
+def downloadAndAddChildrenUrl(url, start2, base_output2, i_url, only_first):
+    elem2 = {"url": url}
+    to_download.append(elem2)
 
-    i = 0
+    i2 = 0
     if not only_first:
-        while i < len(to_download):
-            downloadAndAddChildrenUrl1(i, start, i_url)
-            i = i + 1
+        while i2 < len(to_download):
+            downloadAndAddChildrenUrl1(i2, start2, i_url)
+            i2 = i2 + 1
     else:
-        downloadAndAddChildrenUrl1(i, start, i_url)
+        downloadAndAddChildrenUrl1(i2, start2, i_url)
 
-    start_len = len(start)
-    i = 0
-    while i < len(to_download):
-        url2 = str(to_download[i]["url"])
-        path, path_first = directoryOutput(url2, base_output, start_len, return_first_folder=False)
+    start_len2 = len(start2)
+    i2 = 0
+    while i2 < len(to_download):
+        url2 = str(to_download[i2]["url"])
+        path2, path_first = directoryOutput(url2, base_output2, start_len2, return_first_folder=False)
         file_to_write = None
         try:
-            file_to_write = to_download[i]["content"]
+            file_to_write = to_download[i2]["content"]
         except:
             pass
 
         if file_to_write is not None:
-            if path is not None:
-                with open(path, "w", encoding='utf-8') as file:
+            if path2 is not None:
+                with open(path2, "w", encoding='utf-8') as file:
                     file.write(str(file_to_write))
 
-        i = i + 1
+        i2 = i2 + 1
 
         pass
 
 
-def executeDownload(url, i, start, base_output, only_first):
+def executeDownload(url, i2, start2, base_output2, only_first):
     global to_download
     global success_download
 
@@ -205,32 +205,32 @@ def executeDownload(url, i, start, base_output, only_first):
     to_download = []
     success_download = 0
     try:
-        downloadAndAddChildrenUrl(url[i]["url"], start, base_output, i, only_first)
+        downloadAndAddChildrenUrl(url[i2]["url"], start2, base_output2, i2, only_first)
         if success_download > 0:
-            print("Done [" + url[i]["url"] + "]")
+            print("Done [" + url[i2]["url"] + "]")
             return 1
         else:
-            print("Error [" + url[i]["url"] + "]")
+            print("Error [" + url[i2]["url"] + "]")
             return 0
     except Exception as e:
         print(traceback.format_exc())
-        print("Error [" + url[i]["url"] + "] => " + str(e))
+        print("Error [" + url[i2]["url"] + "] => " + str(e))
         return 0
 
     return 0
 
 
-def generateUrl(start):
+def generateUrl(start2):
     global url_global
 
     url_global = []
     now = datetime.datetime.now()
     year = int(now.year)
-    kl = [2,5,6,7,8, 40, 41, 42,45,54,60, 64, 69,91, 102, 103,104]
-    #kl = range(0,201) #todo: remove later
+    kl = [2, 5, 6, 7, 8, 40, 41, 42, 45, 54, 60, 64, 69, 91, 102, 103, 104]
+    # kl = range(0,201) #todo: remove later
 
-    i = 2018
-    while i <= year:
+    i2 = 2018
+    while i2 <= year:
 
         j = 0  # j = 0 => html, j = 1 => htm
         while j < 2:
@@ -244,35 +244,53 @@ def generateUrl(start):
             k = 0
             while k < len(kl):
                 ks = (str(kl[k])).zfill(3)
-                ks2 = str(i) + "_" + "20" + str(ks) + "_"
-                single = start + "/" + ks2 + js + "/" + ks2 + "generale.html"
+                ks2 = str(i2) + "_" + "20" + str(ks) + "_"
+                single = start2 + "/" + ks2 + js + "/" + ks2 + "generale.html"
 
-                elem = {"url": single, "year": i}
-                url_global.append(elem)
+                elem2 = {"url": single, "year": i2}
+                url_global.append(elem2)
 
                 k = k + 1
 
             j = j + 1
 
-        i += 1
+        i2 += 1
 
     pass
 
 
-def write_html(html, base_output):
-    path = base_output + "/index.html"
-    with open(path, "w", encoding='utf-8') as file:
+def write_html(html, base_output2):
+    path2 = base_output2 + "/index.html"
+    with open(path2, "w", encoding='utf-8') as file:
         file.write(str(html))
     pass
 
 
-def write_index(index_links, base_output):
-    #     elem = {"url": url[i]["url"], "index": folder, "folder": folder_first, "year": url[i]["year"]}
-    index_links.sort(key=lambda x: x["year"], reverse=True)
+def write_index(index_links2, base_output2):
+    # sort
+    index_links2.sort(key=lambda x: x["year"], reverse=True)
 
-    a = 0
-    a = a + 1
+    i2 = 0
+    j = 0
+    while i2 < len(index_links2):
 
+        while j < (len(index_links2) - 1):
+
+            str1 = str(index_links2[j]["fase"]).lower()
+            str2 = str(index_links2[j + 1]["fase"]).lower()
+
+            if str1 > str2:
+                temp = index_links2[j]
+                index_links2[j] = index_links2[j + 1]
+                index_links2[j + 1] = temp
+
+            j = j + 1
+
+        i2 = i2 + 1
+
+    index_links2.sort(key=lambda x: x["year"], reverse=True)
+
+    # write
     html = "<html>\n"
     html += "<head>\n"
     html += "<meta charset='UTF-8'>\n"
@@ -284,7 +302,7 @@ def write_index(index_links, base_output):
     html += "</h1>\n"
     html += "<div>\n"
     html += "<ul>\n"
-    for item in index_links:
+    for item in index_links2:
         html += "<li>\n"
         link = "." + item["path"]
         html += "<a href='" + link + "'>\n"
@@ -302,7 +320,7 @@ def write_index(index_links, base_output):
     html += "</h4>\n"
     html += "</body>\n</html>\n"
 
-    write_html(html, base_output)
+    write_html(html, base_output2)
 
     pass
 
