@@ -54,7 +54,11 @@ def filterLink(soup, url):
     if url.endswith("_generale.html"):
         soup.select_one(".titolo").decompose()
         soup.select_one(".BoxInfoCard").decompose()
-        new_soup5 = BeautifulSoup("<a href='./../'>Go to back homepage</a>",
+        new_soup5 = BeautifulSoup("<div style=\"padding: 1.1rem;font-weight: bold;font-size: calc(1.2rem + 0.1vw);\">"
+                                  "<a href=\"./../\">"
+                                  "🔙 Go to back homepage to see all rankings"
+                                  "</a>"
+                                  "</div>",
                                   features="html.parser")
         soup.select_one(".TablePage").insert(0, new_soup5)
 
