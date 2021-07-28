@@ -54,7 +54,7 @@ def filterLink(soup, url):
     if url.endswith("_generale.html"):
         soup.select_one(".titolo").decompose()
         soup.select_one(".BoxInfoCard").decompose()
-        new_soup5 = BeautifulSoup("<a href='./../'>Go to homepage</a>",
+        new_soup5 = BeautifulSoup("<a href='./../'>Go to back homepage</a>",
                                   features="html.parser")
         soup.select_one(".TablePage").insert(0, new_soup5)
 
@@ -226,8 +226,8 @@ def generateUrl(start):
     url_global = []
     now = datetime.datetime.now()
     year = int(now.year)
-    kl = [8, 40, 41, 42, 64, 91, 102, 103]
-    kl = range(0,201) #todo: remove later
+    kl = [2,5,6,7,8, 40, 41, 42,45,54,60, 64, 69,91, 102, 103,104]
+    #kl = range(0,201) #todo: remove later
 
     i = 2018
     while i <= year:
