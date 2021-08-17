@@ -381,7 +381,7 @@ def getCorsoFase(url_global_item, elem):
     with open(path, 'r') as f:
         contents = f.read()
 
-        soup = BeautifulSoup(contents, 'lxml')
+        soup = BeautifulSoup(contents, features="html.parser")
 
         return getCorso(soup), getFase(soup)
 
