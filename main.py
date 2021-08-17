@@ -280,13 +280,25 @@ def write_index(index_links2, base_output2):
 
         while j < (len(index_links2) - 1):
 
-            str1 = str(index_links2[j]["fase"]).lower()
-            str2 = str(index_links2[j + 1]["fase"]).lower()
+            str1 = None
+            str2 = None
 
-            if str1 > str2:
+            if "fase" in index_links2[j]:
+                str1 = str(index_links2[j]["fase"]).lower()
+
+            if "fase" in index_links2[j+1]:
+                str2 = str(index_links2[j + 1]["fase"]).lower()
+
+            if str1 is None and str2 is None:
+                pass
+            elif str2 is None:
+                pass
+            elif str1 is None or str1 > str2:
                 temp = index_links2[j]
                 index_links2[j] = index_links2[j + 1]
                 index_links2[j + 1] = temp
+            else:
+                pass
 
             j = j + 1
 
@@ -310,7 +322,10 @@ def write_index(index_links2, base_output2):
         html += "<li>\n"
         link = "." + item["path"]
         html += "<a href='" + link + "'>\n"
-        html += str(item["year"]) + " - " + str(item["corso"]) + " " + str(item["fase"]) + "\n"
+        if "corso" in item:
+            html += str(item["year"]) + " - " + str(item["corso"]) + " " + str(item["fase"]) + "\n"
+        else:
+            html += str(item["year"]) + "\n"
         html += "</a>\n"
         html += "</li>\n"
         pass
@@ -395,16 +410,29 @@ if __name__ == '__main__':
 
         if success == 1 or success == 2:
             path = url_global_item["url"][start_len:]
-            elem = {
-                "url": url_global_item["url"],
-                "index": folder,
-                "folder": folder_first,
-                "year": url_global_item["year"],
-                "path": path,
-                "corso": url_global_item["corso"],
-                "fase": url_global_item["fase"]
-            }
-            index_links.append(elem)
+            if "corso" in url_global_item:
+                elem = {
+                    "url": url_global_item["url"],
+                    "index": folder,
+                    "folder": folder_first,
+                    "year": url_global_item["year"],
+                    "path": path,
+                    "corso": url_global_item["corso"],
+                    "fase": url_global_item["fase"]
+                }
+                index_links.append(elem)
+            else:
+                if success == 1:
+                    pass
+                elif success == 2:
+                    elem = {
+                        "url": url_global_item["url"],
+                        "index": folder,
+                        "folder": folder_first,
+                        "year": url_global_item["year"],
+                        "path": path
+                    }
+                    index_links.append(elem)
             pass
 
         i = i + 1
