@@ -286,7 +286,7 @@ def write_index(index_links2, base_output2):
             if "fase" in index_links2[j]:
                 str1 = str(index_links2[j]["fase"]).lower()
 
-            if "fase" in index_links2[j+1]:
+            if "fase" in index_links2[j + 1]:
                 str2 = str(index_links2[j + 1]["fase"]).lower()
 
             if str1 is None and str2 is None:
@@ -363,6 +363,31 @@ def selectWorkingBaseOutput(base_output):
     pass
 
 
+def getPath(param, param1):
+    pass
+
+    p2 = param1.split("/")
+
+    return param + "/" + p2[2]
+
+
+def getCorsoFase(url_global_item, elem):
+    path = getPath(elem["index"], elem["path"])
+    if path is None:
+        return None, None
+
+    path = str(path)
+
+    with open(path, 'r') as f:
+        contents = f.read()
+
+        soup = BeautifulSoup(contents, 'lxml')
+
+        return getCorso(soup), getFase(soup)
+
+    return None, None
+
+
 # main
 if __name__ == '__main__':
 
@@ -432,6 +457,12 @@ if __name__ == '__main__':
                         "year": url_global_item["year"],
                         "path": path
                     }
+
+                    corso, fase = getCorsoFase(url_global_item, elem)
+
+                    elem["corso"] = corso
+                    elem["fase"] = fase
+
                     index_links.append(elem)
             pass
 
