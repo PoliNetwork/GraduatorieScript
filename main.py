@@ -320,6 +320,8 @@ def write_index(index_links2, base_output2):
     html += "<ul>\n"
     for item in index_links2:
         html += "<li>\n"
+        if "delete" in item:
+            html += "<p style='color:black;'>[Deleted in the Polimi website]</p>";
         link = "." + item["path"]
         html += "<a href='" + link + "'>\n"
         if "corso" in item:
@@ -462,6 +464,7 @@ if __name__ == '__main__':
 
                     elem["corso"] = corso
                     elem["fase"] = fase
+                    elem["delete"] = True
 
                     index_links.append(elem)
             pass
