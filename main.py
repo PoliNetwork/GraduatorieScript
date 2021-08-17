@@ -231,7 +231,7 @@ def generateUrl(start2):
     now = datetime.datetime.now()
     year = int(now.year)
     kl = [2, 5, 6, 7, 8, 40, 41, 42, 45, 54, 60, 64, 69, 91, 102, 103, 104]
-    #kl = range(500,1000) #todo: remove later
+    # kl = range(500,1000) #todo: remove later
 
     i2 = 2018
     while i2 <= year:
@@ -329,18 +329,44 @@ def write_index(index_links2, base_output2):
     pass
 
 
+def selectWorkingBaseOutput(base_output):
+    if base_output is None:
+        return None
+
+    if len(base_output) == 0:
+        return None
+
+    if len(base_output) == 1:
+        return base_output[0]
+
+    if len(base_output) > 1:
+        for b in base_output:
+            if os.path.exists(b):
+                return b
+
+    return None
+    pass
+
+
 # main
 if __name__ == '__main__':
 
     global url_global
 
     start = "http://www.risultati-ammissione.polimi.it"
-    base_output = ""
+    base_output = []
     if sys.argv is None or len(sys.argv) < 2 or sys.argv[1] is None:
-        base_output = "D:\\git\\Polimi\\polinetwork.github.io\\graduatorie"
+        base_output.append("D:\\git\\Polimi\\polinetwork.github.io\\graduatorie")
+        base_output.append("C:\\git\\polinetwork.github.io\\graduatorie")
     else:
-        base_output = sys.argv[1]
+        base_output.append(sys.argv[1])
     start_len = len(start)
+
+    base_output = selectWorkingBaseOutput(base_output)
+
+    if base_output is None:
+        print("Base output error!")
+        exit(-2)
 
     generateUrl(start)
 
