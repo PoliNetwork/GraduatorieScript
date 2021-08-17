@@ -368,6 +368,9 @@ if __name__ == '__main__':
         print("Base output error!")
         exit(-2)
 
+    base_output = str(base_output)
+    print("Chosen base output: " + base_output)
+
     generateUrl(start)
 
     index_links = []
@@ -375,23 +378,32 @@ if __name__ == '__main__':
     i = 0
     while i < len(url_global):
 
+        url_global_item = url_global[i]
+
         success = -1
-        folder, folder_first = directoryOutput(url_global[i]["url"], base_output, start_len, return_first_folder=True)
+        folder, folder_first = directoryOutput(url_global_item["url"], base_output, start_len, return_first_folder=True)
         if os.path.isdir(folder):
             files = os.listdir(folder)
             if files is None or len(files) == 0:
                 success = executeDownload(url_global, i, start, base_output, only_first=False)
             else:
-                print("Already done [" + url_global[i]["url"] + "]")
+                print("Already done [" + url_global_item["url"] + "]")
                 executeDownload(url_global, i, start, base_output, only_first=True)
                 success = 2
         else:
             success = executeDownload(url_global, i, start, base_output, only_first=False)
 
         if success == 1 or success == 2:
-            path = url_global[i]["url"][start_len:]
-            elem = {"url": url_global[i]["url"], "index": folder, "folder": folder_first, "year": url_global[i]["year"],
-                    "path": path, "corso": url_global[i]["corso"], "fase": url_global[i]["fase"]}
+            path = url_global_item["url"][start_len:]
+            elem = {
+                "url": url_global_item["url"],
+                "index": folder,
+                "folder": folder_first,
+                "year": url_global_item["year"],
+                "path": path,
+                "corso": url_global_item["corso"],
+                "fase": url_global_item["fase"]
+            }
             index_links.append(elem)
             pass
 
