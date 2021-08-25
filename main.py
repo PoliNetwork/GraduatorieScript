@@ -310,7 +310,7 @@ def write_index(index_links2, base_output2):
     html = "<html>\n"
     html += "<head>\n"
     html += "<meta charset='UTF-8'>\n"
-    html += "<style> li { padding:0.5rem; } </style>\n"
+    html += "<style> li { padding:0.5rem;border: 1px solid;margin: 1rem;border-radius: 1rem; } </style>\n"
     html += "</head>\n"
     html += "<body style='padding:1rem;'>\n"
     html += "<h1>\n"
@@ -325,7 +325,7 @@ def write_index(index_links2, base_output2):
         link = "." + item["path"]
         html += "<a href='" + link + "'>\n"
         if "corso" in item:
-            html += str(item["year"]) + " - " + str(item["corso"]) + " " + str(item["fase"]) + "\n"
+            html += str(item["year"]) + " " + str(item["corso"]) + " " + str(item["fase"]) + "\n"
         else:
             html += str(item["year"]) + "\n"
         html += "</a>\n"
