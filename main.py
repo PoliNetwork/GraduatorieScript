@@ -310,9 +310,15 @@ def write_index(index_links2, base_output2):
     html = "<html>\n"
     html += "<head>\n"
     html += "<meta charset='UTF-8'>\n"
-    html += "<style> li { padding:0.5rem;border: 1px solid;margin: 1rem;border-radius: 1rem; } </style>\n"
+    html += "<style>" \
+            " li { padding:0.5rem;border: 1px solid;margin: 1rem;border-radius: 1rem; } " \
+            "ul{padding-left: 0.1rem;}" \
+            " body{overflow: auto;padding:0.5rem;}" \
+            " h1{overflow: auto;font-size: calc(1.25rem + 1.25vw);}" \
+            "h4{overflow:auto;}" \
+            "</style>\n"
     html += "</head>\n"
-    html += "<body style='padding:1rem;'>\n"
+    html += "<body>\n"
     html += "<h1>\n"
     html += "Graduatorie/Rankings\n"
     html += "</h1>\n"
@@ -333,6 +339,7 @@ def write_index(index_links2, base_output2):
         pass
     html += "</ul>\n"
     html += "</div>\n"
+    html += "<br />\n"
     html += "<h4>\n"
     html += "Website by "
     html += "<a href='./../'>"
