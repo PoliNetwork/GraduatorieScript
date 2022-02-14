@@ -4,4 +4,7 @@ Script:
 > https://github.com/PoliNetwork/GraduatorieScript/blob/main/main.py
 
 usato per riempire questo sito:
-> https://polinetwork.github.io/graduatorie/index.html
+> https://polinetworkorg.github.io/Rankings/
+
+cui repository
+> https://github.com/PoliNetworkOrg/Rankings
