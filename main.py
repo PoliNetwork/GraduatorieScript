@@ -408,11 +408,11 @@ def getCorsoFase(url_global_item, elem):
 def printResults():
     print("\n")
     print("Results:")
-    print("Total = " + str(list_error_download.count() + list_download_completed.count() + list_already_done.count()))
-    print("Download errors = " + str(list_error_download.count()))
-    print("Download completed = " + str(list_download_completed.count()))
-    print("Already done = " + str(list_already_done.count()))
-    if list_download_completed.count() > 0:
+    print("Total = " + str(len(list_error_download) + len(list_download_completed) + len(list_already_done)))
+    print("Download errors = " + str(len(list_error_download)))
+    print("Download completed = " + str(len(list_download_completed)))
+    print("Already done = " + str(len(list_already_done)))
+    if len(list_download_completed) > 0:
         print("Completed download:")
         for i in list_download_completed:
             print(i)
