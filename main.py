@@ -21,6 +21,10 @@ to_download = []
 success_download = 0
 global url_global
 
+list_already_done = []
+list_error_download = []
+list_download_completed = []
+
 
 # methods
 def addLink(link):
@@ -211,13 +215,17 @@ def executeDownload(url, i2, start2, base_output2, only_first):
     try:
         downloadAndAddChildrenUrl(url[i2]["url"], start2, base_output2, i2, only_first)
         if success_download > 0:
+            if not only_first:
+                list_download_completed.append(url[i2]["url"])
             print("Done [" + url[i2]["url"] + "]")
             return 1
         else:
+            list_error_download.append(url[i2]["url"])
             print("Error [" + url[i2]["url"] + "]")
             return 0
     except Exception as e:
         print(traceback.format_exc())
+        list_error_download.append(url[i2]["url"])
         print("Error [" + url[i2]["url"] + "] => " + str(e))
         return 0
 
@@ -397,6 +405,20 @@ def getCorsoFase(url_global_item, elem):
     return None, None
 
 
+def printResults():
+    print("\n")
+    print("Results:")
+    print("Total = " + str(list_error_download.count() + list_download_completed.count() + list_already_done.count()))
+    print("Download errors = " + str(list_error_download.count()))
+    print("Download completed = " + str(list_download_completed.count()))
+    print("Already done = " + str(list_already_done.count()))
+    if list_download_completed.count() > 0:
+        print("Completed download:")
+        for i in list_download_completed:
+            print(i)
+    pass
+
+
 # main
 if __name__ == '__main__':
 
@@ -436,6 +458,7 @@ if __name__ == '__main__':
             if files is None or len(files) == 0:
                 success = executeDownload(url_global, i, start, base_output, only_first=False)
             else:
+                list_already_done.append(url_global_item["url"])
                 print("Already done [" + url_global_item["url"] + "]")
                 executeDownload(url_global, i, start, base_output, only_first=True)
                 success = 2
@@ -481,5 +504,7 @@ if __name__ == '__main__':
     print("Download done [all]!")
 
     write_index(index_links, base_output)
+
+    printResults()
 
     exit(0)
