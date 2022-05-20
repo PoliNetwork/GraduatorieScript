@@ -318,6 +318,10 @@ def write_index(index_links2, base_output2):
     html = "<html>\n"
     html += "<head>\n"
     html += "<meta charset='UTF-8'>\n"
+    html += "<meta name='description' content='Graduatorie degli anni passati per le matricole del Politecnico di " \
+            "Milano, archiviate by PoliNetwork Rankings'>\n "
+    html += "<meta name='keywords' content='Graduatorie, Rankings, Polimi, Matricole, Politecnico, Milano, " \
+            "PoliNetwork'>\n "
     html += "<style>" \
             " li { padding:0.5rem;border: 1px solid;margin: 1rem;border-radius: 1rem; } " \
             "ul{padding-left: 0.1rem;}" \
