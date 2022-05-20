@@ -361,18 +361,18 @@ def write_index(index_links2, base_output2):
     pass
 
 
-def selectWorkingBaseOutput(base_output):
-    if base_output is None:
+def selectWorkingBaseOutput(base_output_2):
+    if base_output_2 is None:
         return None
 
-    if len(base_output) == 0:
+    if len(base_output_2) == 0:
         return None
 
-    if len(base_output) == 1:
-        return base_output[0]
+    if len(base_output_2) == 1:
+        return base_output_2[0]
 
-    if len(base_output) > 1:
-        for b in base_output:
+    if len(base_output_2) > 1:
+        for b in base_output_2:
             if os.path.exists(b):
                 return b
 
@@ -388,14 +388,14 @@ def getPath(param, param1):
     return param + "/" + p2[2]
 
 
-def getCorsoFase(url_global_item, elem):
-    path = getPath(elem["index"], elem["path"])
-    if path is None:
+def getCorsoFase(elem2):
+    path_2 = getPath(elem2["index"], elem2["path"])
+    if path_2 is None:
         return None, None
 
-    path = str(path)
+    path_2 = str(path_2)
 
-    with open(path, 'r') as f:
+    with open(path_2, 'r') as f:
         contents = f.read()
 
         soup = BeautifulSoup(contents, features="html.parser")
@@ -490,7 +490,7 @@ if __name__ == '__main__':
                         "path": path
                     }
 
-                    corso, fase = getCorsoFase(url_global_item, elem)
+                    corso, fase = getCorsoFase(elem)
 
                     elem["corso"] = corso
                     elem["fase"] = fase
