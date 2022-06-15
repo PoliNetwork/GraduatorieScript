@@ -241,7 +241,7 @@ def generateUrl(start2):
     kl = [2, 5, 6, 7, 8, 40, 41, 42, 45, 54, 60, 64, 69, 91, 102, 103, 104]
     # kl = range(500,1000) #todo: remove later
 
-    i2 = 2018
+    i2 = int(now.year) - 1 #year before this one
     while i2 <= year:
 
         j = 0  # j = 0 => html, j = 1 => htm
