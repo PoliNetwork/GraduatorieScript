@@ -241,7 +241,7 @@ def generateUrl(start2):
     kl = [2, 5, 6, 7, 8, 40, 41, 42, 45, 54, 60, 64, 69, 91, 102, 103, 104]
     # kl = range(500,1000) #todo: remove later
 
-    i2 = int(now.year) - 1 #year before this one
+    i2 = int(now.year) - 1  # year before this one
     while i2 <= year:
 
         j = 0  # j = 0 => html, j = 1 => htm
@@ -278,7 +278,7 @@ def write_html(html, base_output2):
     pass
 
 
-def write_index(index_links2, base_output2):
+def write_index(index_links2, base_output2, index_previous_links):
     # sort
     index_links2.sort(key=lambda x: x["year"], reverse=True)
 
@@ -349,6 +349,12 @@ def write_index(index_links2, base_output2):
         html += "</a>\n"
         html += "</li>\n"
         pass
+    for item in index_previous_links:
+        html += "<li>\n"
+        html += "<p style='color:black;'>[Deleted in the Polimi website]</p>";
+        htmls = str(item)
+        html += htmls
+        html += "</li>\n"
     html += "</ul>\n"
     html += "</div>\n"
     html += "<br />\n"
@@ -423,6 +429,33 @@ def printResults():
     pass
 
 
+def getLinksIndex(base_output):
+    print("Already in index [start]")
+
+    result = []
+    try:
+        with open(base_output + "\\index.html") as fp:
+            soup = BeautifulSoup(fp, 'html.parser')
+
+        for item in soup.find_all('li', ):
+            pass
+            for item2 in item.contents:
+                try:
+                    pass
+                    link = item2.attrs['href']
+                    print(link)
+                    result.append(item2)
+
+                except:
+                    pass
+    except Exception as e:
+        print(e)
+        pass
+    pass
+
+    print("Already in index [end]")
+    return result
+
 # main
 if __name__ == '__main__':
 
@@ -433,6 +466,7 @@ if __name__ == '__main__':
     if sys.argv is None or len(sys.argv) < 2 or sys.argv[1] is None:
         base_output.append("D:\\git\\Polimi\\polinetwork.github.io\\graduatorie")
         base_output.append("C:\\git\\polinetwork.github.io\\graduatorie")
+        base_output.append("D:\\git\\PoliNetwork\\Rankings\\docs")
     else:
         base_output.append(sys.argv[1])
     start_len = len(start)
@@ -445,6 +479,8 @@ if __name__ == '__main__':
 
     base_output = str(base_output)
     print("Chosen base output: " + base_output)
+
+    index_previous_links = getLinksIndex(base_output)
 
     generateUrl(start)
 
@@ -507,7 +543,7 @@ if __name__ == '__main__':
 
     print("Download done [all]!")
 
-    write_index(index_links, base_output)
+    write_index(index_links, base_output, index_previous_links)
 
     printResults()
 
