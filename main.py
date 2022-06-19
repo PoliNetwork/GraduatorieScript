@@ -428,15 +428,9 @@ def printResults():
             print(i)
     pass
 
-
-def getLinksIndex(base_output):
-    print("Already in index [start]")
-
-    result = []
+def find_index(soup):
+    results = []
     try:
-        with open(base_output + "\\index.html") as fp:
-            soup = BeautifulSoup(fp, 'html.parser')
-
         for item in soup.find_all('li', ):
             pass
             for item2 in item.contents:
@@ -448,13 +442,42 @@ def getLinksIndex(base_output):
 
                 except:
                     pass
+    except:
+        pass
+    return results
+
+
+def getLinksIndex(base_output):
+    print("Already in index [start]")
+
+
+    try:
+        with open(base_output + "\\index.html") as fp:
+            soup = BeautifulSoup(fp, 'html.parser')
+
+        return find_index(soup)
+
+    except Exception as e:
+        print(e)
+        pass
+    pass
+
+    try:
+        opener = urllib.request.FancyURLopener({})
+        url = "https://raw.githubusercontent.com/PoliNetworkOrg/Rankings/main/docs/index.html"
+        f = opener.open(url)
+        content = f.read()
+        soup = BeautifulSoup(content, 'html.parser')
+
+        return find_index(soup)
+
     except Exception as e:
         print(e)
         pass
     pass
 
     print("Already in index [end]")
-    return result
+
 
 # main
 if __name__ == '__main__':
