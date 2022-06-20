@@ -335,6 +335,7 @@ def write_index(index_links2, base_output2, index_previous_links):
     html += "Graduatorie/Rankings\n"
     html += "</h1>\n"
     html += "<div>\n"
+    html += "<br /><p>Recent rankings:</p><br />\n"
     html += "<ul>\n"
     for item in index_links2:
         html += "<li>\n"
@@ -349,6 +350,9 @@ def write_index(index_links2, base_output2, index_previous_links):
         html += "</a>\n"
         html += "</li>\n"
         pass
+    html += "</ul>\n"
+    html += "<br /><p>Previous rankings:</p><br />\n"
+    html += "<ul>\n"
     for item in index_previous_links:
         html += "<li>\n"
         html += "<p style='color:black;'>[Deleted in the Polimi website]</p>";
