@@ -278,6 +278,17 @@ def write_html(html, base_output2):
     pass
 
 
+def alreadyPresent(item, list_index):
+    pass
+    link = item.attrs['href']
+    link = str(link)[1:]
+    for item2 in list_index:
+        link2 = item2['url']
+        if str(link2).endswith(link):
+            return True
+
+    return False
+
 def write_index(index_links2, base_output2, index_previous_links):
     # sort
     index_links2.sort(key=lambda x: x["year"], reverse=True)
@@ -356,11 +367,12 @@ def write_index(index_links2, base_output2, index_previous_links):
     print("len(index_previous_links):")
     print(len(index_previous_links))
     for item in index_previous_links:
-        html += "<li>\n"
-        html += "<p style='color:black;'>[Deleted in the Polimi website]</p>";
-        htmls = str(item)
-        html += htmls
-        html += "</li>\n"
+        if not alreadyPresent(item, index_links2):
+            html += "<li>\n"
+            html += "<p style='color:black;'>[Deleted in the Polimi website]</p>"
+            htmls = str(item)
+            html += htmls
+            html += "</li>\n"
     html += "</ul>\n"
     html += "</div>\n"
     html += "<br />\n"
