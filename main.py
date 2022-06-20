@@ -444,7 +444,7 @@ def find_index(soup):
                     pass
                     link = item2.attrs['href']
                     print(link)
-                    result.append(item2)
+                    results.append(item2)
 
                 except:
                     pass
