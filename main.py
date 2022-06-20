@@ -353,6 +353,8 @@ def write_index(index_links2, base_output2, index_previous_links):
     html += "</ul>\n"
     html += "<br /><p>Previous rankings:</p><br />\n"
     html += "<ul>\n"
+    print("len(index_previous_links):")
+    print(len(index_previous_links))
     for item in index_previous_links:
         html += "<li>\n"
         html += "<p style='color:black;'>[Deleted in the Polimi website]</p>";
