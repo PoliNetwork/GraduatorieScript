@@ -378,7 +378,7 @@ def write_index(index_links2, base_output2, index_previous_links):
     html += "<br />\n"
     html += "<h4>\n"
     html += "Website by "
-    html += "<a href='./../'>"
+    html += "<a href='https://polinetwork.org/'>"
     html += "PoliNetwork"
     html += "</a>\n"
     html += "</h4>\n"
