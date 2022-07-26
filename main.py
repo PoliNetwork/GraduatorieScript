@@ -505,6 +505,8 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
+    print("starting. version: 2")
+
     global url_global
 
     start = "http://www.risultati-ammissione.polimi.it"
