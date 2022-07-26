@@ -241,34 +241,20 @@ def generateUrl(start2):
     kl = [2, 5, 6, 7, 8, 40, 41, 42, 45, 54, 60, 64, 69, 91, 102, 103, 104]
     # kl = range(500,1000) #todo: remove later
     kl2 = ["", "ab23_"]
-
+    js2 = ["htm", "html"]
     i2 = int(now.year) - 1  # year before this one
     while i2 <= year:
 
-        j = 0  # j = 0 => html, j = 1 => htm
-        while j < 2:
+        for js in js2:
 
-            js = ""
-            if j == 0:
-                js = "html"
-            else:
-                js = "htm"
-
-            k = 0
-            k2 = 0
-            while k2 < len(kl2):
-                while k < len(kl):
-                    ks = (str(kl[k])).zfill(3)
+            for k2 in kl2:
+                for k in kl:
+                    ks = (str(k)).zfill(3)
                     ks2 = str(i2) + "_" + "20" + str(ks) + "_"
-                    single = start2 + "/" + ks2 + kl2[k2] + js + "/" + ks2 + "generale.html"
+                    single = start2 + "/" + ks2 + str(k2) + js + "/" + ks2 + "generale.html"
 
                     elem2 = {"url": single, "year": i2}
                     url_global.append(elem2)
-
-                    k = k + 1
-                k2 = k2 + 1
-
-            j = j + 1
 
         i2 += 1
 
@@ -510,7 +496,7 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    version = 3
+    version = 4
     print("starting. version: " + str(version))
 
     global url_global
