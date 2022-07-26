@@ -272,6 +272,11 @@ def generateUrl(start2):
 
         i2 += 1
 
+    print("starting printing url to download")
+    for url2 in url_global:
+        print(url2)
+    print("finishing printing url to download")
+
     pass
 
 
@@ -505,7 +510,8 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    print("starting. version: 2")
+    version = 3
+    print("starting. version: " + str(version))
 
     global url_global
 
