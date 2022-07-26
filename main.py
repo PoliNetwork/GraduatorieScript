@@ -240,6 +240,7 @@ def generateUrl(start2):
     year = int(now.year)
     kl = [2, 5, 6, 7, 8, 40, 41, 42, 45, 54, 60, 64, 69, 91, 102, 103, 104]
     # kl = range(500,1000) #todo: remove later
+    kl2 = ["", "ab23_"]
 
     i2 = int(now.year) - 1  # year before this one
     while i2 <= year:
@@ -254,15 +255,18 @@ def generateUrl(start2):
                 js = "htm"
 
             k = 0
-            while k < len(kl):
-                ks = (str(kl[k])).zfill(3)
-                ks2 = str(i2) + "_" + "20" + str(ks) + "_"
-                single = start2 + "/" + ks2 + js + "/" + ks2 + "generale.html"
+            k2 = 0
+            while k2 < len(kl2):
+                while k < len(kl):
+                    ks = (str(kl[k])).zfill(3)
+                    ks2 = str(i2) + "_" + "20" + str(ks) + "_"
+                    single = start2 + "/" + ks2 + kl2[k2] + js + "/" + ks2 + "generale.html"
 
-                elem2 = {"url": single, "year": i2}
-                url_global.append(elem2)
+                    elem2 = {"url": single, "year": i2}
+                    url_global.append(elem2)
 
-                k = k + 1
+                    k = k + 1
+                k2 = k2 + 1
 
             j = j + 1
 
@@ -288,6 +292,7 @@ def alreadyPresent(item, list_index):
             return True
 
     return False
+
 
 def write_index(index_links2, base_output2, index_previous_links):
     # sort
@@ -446,6 +451,7 @@ def printResults():
             print(i)
     pass
 
+
 def find_index(soup):
     results = []
     try:
@@ -467,7 +473,6 @@ def find_index(soup):
 
 def getLinksIndex(base_output):
     print("Already in index [start]")
-
 
     try:
         with open(base_output + "\\index.html") as fp:
