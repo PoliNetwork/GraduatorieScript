@@ -232,6 +232,12 @@ def executeDownload(url, i2, start2, base_output2, only_first):
     return 0
 
 
+def getYearFromString(m):
+    m2 = m[0:4]
+    return int(m2)
+    pass
+
+
 def generateUrl(start2):
     global url_global
 
@@ -240,23 +246,30 @@ def generateUrl(start2):
     year = int(now.year)
     kl = [2, 5, 6, 7, 8, 40, 41, 42, 45, 54, 60, 64, 69, 91, 102, 103, 104]
     # kl = range(500,1000) #todo: remove later
-    kl2 = ["", "ab23_"]
+
     js2 = ["htm", "html"]
     i2 = int(now.year) - 1  # year before this one
     while i2 <= year:
 
         for js in js2:
 
-            for k2 in kl2:
-                for k in kl:
-                    ks = (str(k)).zfill(3)
-                    ks2 = str(i2) + "_" + "20" + str(ks) + "_"
-                    single = start2 + "/" + ks2 + str(k2) + js + "/" + ks2 + "generale.html"
+            for k in kl:
+                ks = (str(k)).zfill(3)
+                ks2 = str(i2) + "_" + "20" + str(ks) + "_"
+                single = start2 + "/" + ks2 + + js + "/" + ks2 + "generale.html"
 
-                    elem2 = {"url": single, "year": i2}
-                    url_global.append(elem2)
+                elem2 = {"url": single, "year": i2}
+                url_global.append(elem2)
 
         i2 += 1
+
+    manual_urls = ["2022_20002_46h3_html/2022_20002_generale.html",
+                   "2022_20102_ab23_html/2022_20102_generale.html"]
+
+    for m in manual_urls:
+        single = start2 + "/" + m
+        elem2 = {"url": single, "year": getYearFromString(m)}
+        url_global.append(elem2)
 
     print("starting printing url to download")
     for url2 in url_global:
