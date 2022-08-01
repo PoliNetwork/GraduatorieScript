@@ -256,7 +256,7 @@ def generateUrl(start2):
             for k in kl:
                 ks = (str(k)).zfill(3)
                 ks2 = str(i2) + "_" + "20" + str(ks) + "_"
-                single = start2 + "/" + ks2 + + js + "/" + ks2 + "generale.html"
+                single = start2 + "/" + ks2 + js + "/" + ks2 + "generale.html"
 
                 elem2 = {"url": single, "year": i2}
                 url_global.append(elem2)
