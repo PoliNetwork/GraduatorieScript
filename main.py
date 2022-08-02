@@ -233,6 +233,17 @@ def executeDownload(url, i2, start2, base_output2, only_first):
 
 
 def getYearFromString(m):
+    m = str(m)
+    if m.__contains__("/"):
+        m3 = m.split("/")
+        for m4 in m3:
+            try:
+                m5 = m4[0:4]
+                m6 = int(m5)
+                return m6
+            except:
+                pass
+
     m2 = m[0:4]
     return int(m2)
     pass
@@ -300,10 +311,70 @@ def getBruteforcedList(bruteforceEnabled):
     return listResult
 
 
+def getIfPresent(elem2):
+    global url_global
+
+    url = str(elem2["url"])
+    for item in url_global:
+        url2 = str(item["url"])
+
+        if url == url2:
+            return True
+
+    return False
+
+
+global crawl_links
+crawl_links = []
+
+
+def crawl(start2, url="", i=0, linkStart=None):
+    global url_global
+    global crawl_links
+
+    if i > 2:
+        return
+    if not url:
+        url = "https://www.polimi.it/in-evidenza"
+
+    url = urljoin(linkStart, url)
+
+    if crawl_links.__contains__(url):
+        return
+
+    if linkStart is not None:
+        if not str(url).startswith(linkStart):
+            return
+
+    crawl_links.append(url)
+
+    try:
+        soup = BeautifulSoup(urllib.request.urlopen(url), features="html.parser")
+
+        links = []
+        for link in soup.findAll('a'):
+            links.append(link.get('href'))
+
+        for link in links:
+            crawl(start2, link, i + 1, url)
+
+            if str(link).startswith(start2):
+                elem2 = {"url": link, "year": getYearFromString(link)}
+                isPresent = getIfPresent(elem2)
+                if not isPresent:
+                    url_global.append(elem2)
+    except:
+        pass
+
+    pass
+
+
 def generateUrl(start2, bruteforceEnableLocal):
     global url_global
 
     url_global = []
+
+    # CHECK COMMON LINKS
     now = datetime.datetime.now()
     year = int(now.year)
     kl = [2, 5, 6, 7, 8, 40, 41, 42, 45, 54, 60, 64, 69, 91, 102, 103, 104]
@@ -320,6 +391,7 @@ def generateUrl(start2, bruteforceEnableLocal):
             elem2 = {"url": single, "year": year}
             url_global.append(elem2)
 
+    # MANUAL URLS
     manual_urls = [
         "2022_20002_46h3_html/2022_20002_generale.html",
         "2022_20102_ab23_html/2022_20102_generale.html",
@@ -331,6 +403,12 @@ def generateUrl(start2, bruteforceEnableLocal):
         elem2 = {"url": single, "year": getYearFromString(m)}
         url_global.append(elem2)
 
+    # CRAWL LINKS FROM POLIMI WEBSITE
+    print("Number of URLs before crawl: " + str(len(url_global)))
+    crawl(start2)
+    print("Number of URLs after crawl: " + str(len(url_global)))
+
+    # PRINT URL TO DOWNLOAD
     print("starting printing url to download")
     for url2 in url_global:
         print(url2)
