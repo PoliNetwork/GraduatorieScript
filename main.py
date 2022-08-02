@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import datetime
 import codecs
 import sys
+from string import ascii_lowercase
 
 try:
     from urllib.parse import urlparse, urljoin
@@ -238,7 +239,69 @@ def getYearFromString(m):
     pass
 
 
-def generateUrl(start2):
+def finished(words, limit):
+    for i in range(0, limit):
+        if words[i] != 35:
+            return False
+
+    return True
+
+
+def getWord(words):
+    result = ""
+    for word in words:
+        if word < 26:
+            result += ascii_lowercase[word]
+        else:
+            number = word - 26
+            result += str(number)
+
+    return result
+
+
+def nextWords(words):
+    i = len(words) - 1
+    increasedDone = False
+    riporto = False
+    while i >= 0:
+
+        if riporto == True:
+            words[i] = words[i] + 1
+            if words[i] < 36:
+                return words
+
+        if words[i] < 36 and riporto == False and increasedDone == False:
+            words[i] = words[i] + 1
+            increasedDone = True
+
+        if words[i] == 36:
+            words[i] = 0
+            riporto = True
+
+        i = i - 1
+
+    return words
+
+
+def getBruteforcedList(bruteforceEnabled):
+    if bruteforceEnabled == False:
+        return [""]
+
+    list = [""]
+    words = []
+    limit = 4
+    for i in range(0, limit):
+        words.append(0)
+
+    while finished(words, limit) == False:
+        word = getWord(words)
+        list.append(word + "_")
+        words = nextWords(words)
+
+    return list
+
+
+def generateUrl(start2, bruteforceEnableLocal):
     global url_global
 
     url_global = []
@@ -247,24 +310,22 @@ def generateUrl(start2):
     kl = [2, 5, 6, 7, 8, 40, 41, 42, 45, 54, 60, 64, 69, 91, 102, 103, 104]
     # kl = range(500,1000) #todo: remove later
 
-    js2 = ["htm", "html"]
-    i2 = int(now.year) - 1  # year before this one
-    while i2 <= year:
+    bruteforce = getBruteforcedList(bruteforceEnableLocal)
 
-        for js in js2:
+    for b in bruteforce:
+        for k in kl:
+            ks = (str(k)).zfill(3)
+            ks2 = str(year) + "_" + "20" + str(ks) + "_"
+            single = start2 + "/" + ks2 + b + "html" + "/" + ks2 + "generale.html"
 
-            for k in kl:
-                ks = (str(k)).zfill(3)
-                ks2 = str(i2) + "_" + "20" + str(ks) + "_"
-                single = start2 + "/" + ks2 + js + "/" + ks2 + "generale.html"
+            elem2 = {"url": single, "year": year}
+            url_global.append(elem2)
 
-                elem2 = {"url": single, "year": i2}
-                url_global.append(elem2)
-
-        i2 += 1
-
-    manual_urls = ["2022_20002_46h3_html/2022_20002_generale.html",
-                   "2022_20102_ab23_html/2022_20102_generale.html"]
+    manual_urls = [
+        "2022_20002_46h3_html/2022_20002_generale.html",
+        "2022_20102_ab23_html/2022_20102_generale.html",
+        "2022_20103_355c_html/2022_20103_generale.html"
+    ]
 
     for m in manual_urls:
         single = start2 + "/" + m
@@ -532,7 +593,12 @@ if __name__ == '__main__':
 
     index_previous_links = getLinksIndex(base_output)
 
-    generateUrl(start)
+    currentMonth = int(datetime.datetime.now().month)
+    bruteforceEnabled = False
+    # if currentMonth == 8:  # august
+    #    bruteforceEnabled = True
+
+    generateUrl(start, bruteforceEnabled)
 
     index_links = []
 
