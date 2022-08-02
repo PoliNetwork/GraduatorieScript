@@ -359,8 +359,6 @@ def write_index(index_links2, base_output2, index_previous_links):
     html += "<ul>\n"
     for item in index_links2:
         html += "<li>\n"
-        if "delete" in item:
-            html += "<p style='color:black;'>[Deleted in the Polimi website]</p>";
         link = "." + item["path"]
         html += "<a href='" + link + "'>\n"
         if "corso" in item:
@@ -378,7 +376,6 @@ def write_index(index_links2, base_output2, index_previous_links):
     for item in index_previous_links:
         if not alreadyPresent(item, index_links2):
             html += "<li>\n"
-            html += "<p style='color:black;'>[Deleted in the Polimi website]</p>"
             htmls = str(item)
             html += htmls
             html += "</li>\n"
