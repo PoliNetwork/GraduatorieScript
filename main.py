@@ -1,13 +1,12 @@
 # imports
+import datetime
 import os
+import sys
 import time
 import traceback
 import urllib.request
-from bs4 import BeautifulSoup
-import datetime
-import codecs
-import sys
 from string import ascii_lowercase
+from bs4 import BeautifulSoup
 
 try:
     from urllib.parse import urlparse, urljoin
@@ -34,7 +33,7 @@ def addLink(link):
         url2 = to_download[j]["url"]
         if url2 == link:
             return
-        j = j + 1
+        j += 1
 
     elem2 = {"url": link}
     to_download.append(elem2)
@@ -137,7 +136,7 @@ def downloadAndAddChildrenUrl1(i2, start2, i_url):
                     print("Link not valid! " + link + "\n")
 
     except Exception as e:
-        print("Failed to download [" + url + "]")
+        print("Failed to download [" + url + "], " + str(e))
     pass
 
 
@@ -167,7 +166,7 @@ def directoryOutput(url, base_output2, start_len2, return_first_folder):
         else:
             os.makedirs(path2)
 
-        j = j + 1
+        j += 1
 
     return path2 + "/" + url3[len(url3) - 1], url3[0]
 
@@ -180,7 +179,7 @@ def downloadAndAddChildrenUrl(url, start2, base_output2, i_url, only_first):
     if not only_first:
         while i2 < len(to_download):
             downloadAndAddChildrenUrl1(i2, start2, i_url)
-            i2 = i2 + 1
+            i2 += 1
     else:
         downloadAndAddChildrenUrl1(i2, start2, i_url)
 
@@ -200,7 +199,7 @@ def downloadAndAddChildrenUrl(url, start2, base_output2, i_url, only_first):
                 with open(path2, "w", encoding='utf-8') as file:
                     file.write(str(file_to_write))
 
-        i2 = i2 + 1
+        i2 += 1
 
         pass
 
@@ -265,40 +264,40 @@ def nextWords(words):
     riporto = False
     while i >= 0:
 
-        if riporto == True:
-            words[i] = words[i] + 1
+        if riporto:
+            words[i] += 1
             if words[i] < 36:
                 return words
 
         if words[i] < 36 and riporto == False and increasedDone == False:
-            words[i] = words[i] + 1
+            words[i] += 1
             increasedDone = True
 
         if words[i] == 36:
             words[i] = 0
             riporto = True
 
-        i = i - 1
+        i -= 1
 
     return words
 
 
 def getBruteforcedList(bruteforceEnabled):
-    if bruteforceEnabled == False:
+    if not bruteforceEnabled:
         return [""]
 
-    list = [""]
+    listResult = [""]
     words = []
     limit = 4
     for i in range(0, limit):
         words.append(0)
 
-    while finished(words, limit) == False:
+    while not finished(words, limit):
         word = getWord(words)
-        list.append(word + "_")
+        listResult.append(word + "_")
         words = nextWords(words)
 
-    return list
+    return listResult
 
 
 def generateUrl(start2, bruteforceEnableLocal):
@@ -389,9 +388,9 @@ def write_index(index_links2, base_output2, index_previous_links):
             else:
                 pass
 
-            j = j + 1
+            j += 1
 
-        i2 = i2 + 1
+        i2 += 1
 
     index_links2.sort(key=lambda x: x["year"], reverse=True)
 
@@ -655,7 +654,7 @@ if __name__ == '__main__':
                     index_links.append(elem)
             pass
 
-        i = i + 1
+        i += 1
 
     print("Download done [all]!")
 
