@@ -229,20 +229,27 @@ def downloadAndAddChildrenUrl(url, start2, base_output2, i_url, only_first):
         downloadAndAddChildrenUrl1(i2, start2, i_url)
 
     start_len2 = len(start2)
-    i2 = 0
-    while i2 < len(to_download):
-        url2 = str(to_download[i2]["url"])
-        path2, path_first = directoryOutput(url2, base_output2, start_len2, return_first_folder=False)
-        file_to_write = None
+
+    for to_download2 in to_download:
         try:
-            file_to_write = to_download[i2]["content"]
+            url2 = str(to_download2["url"])
+            path2, path_first = directoryOutput(url2, base_output2, start_len2, return_first_folder=False)
+            file_to_write = None
+            try:
+                file_to_write = to_download2["content"]
+            except:
+                pass
+
+            try:
+                if file_to_write is not None:
+                    if path2 is not None:
+                        with open(path2, "w", encoding='utf-8') as file:
+                            file.write(str(file_to_write))
+            except:
+                pass
+
         except:
             pass
-
-        if file_to_write is not None:
-            if path2 is not None:
-                with open(path2, "w", encoding='utf-8') as file:
-                    file.write(str(file_to_write))
 
         i2 += 1
 
@@ -694,7 +701,7 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    version = 9
+    version = 10
     print("starting. version: " + str(version))
 
     global url_global
