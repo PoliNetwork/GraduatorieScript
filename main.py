@@ -263,9 +263,6 @@ def executeDownload(url, i2, start2, base_output2, only_first):
     time.sleep(1)
 
     url2 = url[i2]["url"]
-    if url2 == "http://www.risultati-ammissione.polimi.it/2022_20103_355c_html/2022_20103_generale.html":
-        a = 0
-        a = a + 1
 
     to_download = []
     success_download = 0
@@ -701,7 +698,7 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    version = 10
+    version = 11
     print("starting. version: " + str(version))
 
     global url_global
@@ -736,7 +733,7 @@ if __name__ == '__main__':
 
     index_links = []
 
-    redo = True
+    redo = False
     print("Redo: " + str(redo))
 
     i = 0
