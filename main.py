@@ -40,7 +40,6 @@ def addLink(link):
 
 
 def filterLink(soup, url):
-
     if not url:
         return None
 
@@ -117,7 +116,7 @@ def filterLink(soup, url):
     except Exception as e7:
         print("Failed to download (07) [" + url + "], " + str(e7))
 
-    return None
+    return soup
 
 
 def getCorso(soup):
@@ -695,7 +694,7 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    version = 8
+    version = 9
     print("starting. version: " + str(version))
 
     global url_global
