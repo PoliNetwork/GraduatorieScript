@@ -40,7 +40,6 @@ def addLink(link):
 
 
 def filterLink(soup, url):
-
     try:
         url = str(url)
 
@@ -56,46 +55,60 @@ def filterLink(soup, url):
         new_soup4 = BeautifulSoup("<meta charset='UTF-8'>",
                                   features="html.parser")
         soup.head.insert(0, new_soup4)
+    except Exception as e8:
+        print("Failed to download (08) [" + url + "], " + str(e8))
 
+    try:
         if url.endswith("_generale.html"):
-            soup.select_one(".titolo").decompose()
-            soup.select_one(".BoxInfoCard").decompose()
-            new_soup5 = BeautifulSoup("<div style=\"padding: 1.1rem;font-weight: bold;font-size: calc(1.2rem + 0.1vw);\">"
-                                      "<a href=\"./../\">"
-                                      "🔙 Go to back homepage to see all rankings"
-                                      "</a>"
-                                      "</div>",
-                                      features="html.parser")
-            soup.select_one(".TablePage").insert(0, new_soup5)
+            try:
+                soup.select_one(".titolo").decompose()
+                soup.select_one(".BoxInfoCard").decompose()
+                new_soup5 = BeautifulSoup(
+                    "<div style=\"padding: 1.1rem;font-weight: bold;font-size: calc(1.2rem + 0.1vw);\">"
+                    "<a href=\"./../\">"
+                    "🔙 Go to back homepage to see all rankings"
+                    "</a>"
+                    "</div>",
+                    features="html.parser")
+                soup.select_one(".TablePage").insert(0, new_soup5)
+            except Exception as e9:
+                print("Failed to download (09) [" + url + "], " + str(e9))
 
             pass
         elif "_indice.html" in url and "sotto_indice.html" not in url:
             return None
         elif "_sotto_" in url and "sotto_indice.html" not in url:
-            # da rimuovere la colonna matricola
-            tab = soup.find("table", {"class": "TableDati"})
-            soup.select(".HeadColumn1")[1].decompose()
-            rows = tab.select_one(".TableDati-tbody")
-            for row in rows:
-                row.select(".Dati1")[1].decompose()
+            try:
+                # da rimuovere la colonna matricola
+                tab = soup.find("table", {"class": "TableDati"})
+                soup.select(".HeadColumn1")[1].decompose()
+                rows = tab.select_one(".TableDati-tbody")
+                for row in rows:
+                    row.select(".Dati1")[1].decompose()
 
-            return soup
+                return soup
+            except Exception as e10:
+                print("Failed to download (10) [" + url + "], " + str(e10))
+
 
         elif "_grad_" in url and "_M.html" in url:
-            # da rimuovere la colonna matricola (prima colonna)
-            tab = soup.find("table", {"class": "TableDati"})
-            soup.select_one(".HeadColumn1").decompose()
-            rows = tab.select_one(".TableDati-tbody")
-            for row in rows:
-                row.select_one(".Dati1").decompose()
+            try:
+                # da rimuovere la colonna matricola (prima colonna)
+                tab = soup.find("table", {"class": "TableDati"})
+                soup.select_one(".HeadColumn1").decompose()
+                rows = tab.select_one(".TableDati-tbody")
+                for row in rows:
+                    row.select_one(".Dati1").decompose()
 
-            return soup
+                return soup
+
+            except Exception as e11:
+                print("Failed to download (11) [" + url + "], " + str(e11))
 
         return soup
 
     except Exception as e7:
         print("Failed to download (07) [" + url + "], " + str(e7))
-
 
     return None
 
