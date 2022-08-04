@@ -40,6 +40,13 @@ def addLink(link):
 
 
 def filterLink(soup, url):
+
+    if not url:
+        return None
+
+    if not soup:
+        return None
+
     try:
         url = str(url)
 
@@ -688,7 +695,7 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    version = 7
+    version = 8
     print("starting. version: " + str(version))
 
     global url_global
