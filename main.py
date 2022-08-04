@@ -687,6 +687,8 @@ if __name__ == '__main__':
 
     index_links = []
 
+    redo = False
+
     i = 0
     while i < len(url_global):
 
@@ -696,7 +698,7 @@ if __name__ == '__main__':
         folder, folder_first = directoryOutput(url_global_item["url"], base_output, start_len, return_first_folder=True)
         if os.path.isdir(folder):
             files = os.listdir(folder)
-            if files is None or len(files) == 0:
+            if (files is None or len(files) == 0) and redo == False:
                 success = executeDownload(url_global, i, start, base_output, only_first=False)
             else:
                 list_already_done.append(url_global_item["url"])
