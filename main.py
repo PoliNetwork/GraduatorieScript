@@ -129,14 +129,17 @@ def downloadAndAddChildrenUrl1(i2, start2, i_url):
         if soup is not None:
             success_download += 1
             for link in soup.find_all('a', href=True):
-                link = urljoin(url, link["href"])
-                if link.startswith(start2):
-                    addLink(link)
-                else:
-                    print("Link not valid! " + link + "\n")
+                try:
+                    link = urljoin(url, link["href"])
+                    if link.startswith(start2):
+                        addLink(link)
+                    else:
+                        print("Link not valid! " + link + "\n")
+                except Exception as e2:
+                    print("Failed to download (01) [" + url + "], " + str(e2))
 
-    except Exception as e:
-        print("Failed to download [" + url + "], " + str(e))
+    except Exception as e1:
+        print("Failed to download (02) [" + url + "], " + str(e1))
     pass
 
 
@@ -210,23 +213,28 @@ def executeDownload(url, i2, start2, base_output2, only_first):
 
     time.sleep(1)
 
+    url2 = url[i2]["url"]
+    if url2 == "http://www.risultati-ammissione.polimi.it/2022_20103_355c_html/2022_20103_generale.html":
+        a = 0
+        a = a + 1
+
     to_download = []
     success_download = 0
     try:
-        downloadAndAddChildrenUrl(url[i2]["url"], start2, base_output2, i2, only_first)
+        downloadAndAddChildrenUrl(url2, start2, base_output2, i2, only_first)
         if success_download > 0:
             if not only_first:
-                list_download_completed.append(url[i2]["url"])
-            print("Done [" + url[i2]["url"] + "]")
+                list_download_completed.append(url2)
+            print("Done [" + url2 + "]")
             return 1
         else:
-            list_error_download.append(url[i2]["url"])
-            print("Error [" + url[i2]["url"] + "]")
+            list_error_download.append(url2)
+            print("Error [" + url2 + "]")
             return 0
     except Exception as e:
         print(traceback.format_exc())
-        list_error_download.append(url[i2]["url"])
-        print("Error [" + url[i2]["url"] + "] => " + str(e))
+        list_error_download.append(url2)
+        print("Error [" + url2 + "] => " + str(e))
         return 0
 
     return 0
