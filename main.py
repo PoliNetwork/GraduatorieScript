@@ -40,57 +40,64 @@ def addLink(link):
 
 
 def filterLink(soup, url):
-    url = str(url)
 
-    new_soup = BeautifulSoup('<link rel="stylesheet" href="%s" type="text/css">' % '../style/ateneo2014.css',
-                             features="html.parser")
-    soup.head.insert(0, new_soup)
-    new_soup2 = BeautifulSoup('<link rel="stylesheet" href="%s" type="text/css">' % '../style/desktop.css',
-                              features="html.parser")
-    soup.head.insert(0, new_soup2)
-    new_soup3 = BeautifulSoup('<link rel="stylesheet" href="%s" type="text/css">' % '../style/graduatorie.css',
-                              features="html.parser")
-    soup.head.insert(0, new_soup3)
-    new_soup4 = BeautifulSoup("<meta charset='UTF-8'>",
-                              features="html.parser")
-    soup.head.insert(0, new_soup4)
+    try:
+        url = str(url)
 
-    if url.endswith("_generale.html"):
-        soup.select_one(".titolo").decompose()
-        soup.select_one(".BoxInfoCard").decompose()
-        new_soup5 = BeautifulSoup("<div style=\"padding: 1.1rem;font-weight: bold;font-size: calc(1.2rem + 0.1vw);\">"
-                                  "<a href=\"./../\">"
-                                  "🔙 Go to back homepage to see all rankings"
-                                  "</a>"
-                                  "</div>",
+        new_soup = BeautifulSoup('<link rel="stylesheet" href="%s" type="text/css">' % '../style/ateneo2014.css',
+                                 features="html.parser")
+        soup.head.insert(0, new_soup)
+        new_soup2 = BeautifulSoup('<link rel="stylesheet" href="%s" type="text/css">' % '../style/desktop.css',
                                   features="html.parser")
-        soup.select_one(".TablePage").insert(0, new_soup5)
+        soup.head.insert(0, new_soup2)
+        new_soup3 = BeautifulSoup('<link rel="stylesheet" href="%s" type="text/css">' % '../style/graduatorie.css',
+                                  features="html.parser")
+        soup.head.insert(0, new_soup3)
+        new_soup4 = BeautifulSoup("<meta charset='UTF-8'>",
+                                  features="html.parser")
+        soup.head.insert(0, new_soup4)
 
-        pass
-    elif "_indice.html" in url and "sotto_indice.html" not in url:
-        return None
-    elif "_sotto_" in url and "sotto_indice.html" not in url:
-        # da rimuovere la colonna matricola
-        tab = soup.find("table", {"class": "TableDati"})
-        soup.select(".HeadColumn1")[1].decompose()
-        rows = tab.select_one(".TableDati-tbody")
-        for row in rows:
-            row.select(".Dati1")[1].decompose()
+        if url.endswith("_generale.html"):
+            soup.select_one(".titolo").decompose()
+            soup.select_one(".BoxInfoCard").decompose()
+            new_soup5 = BeautifulSoup("<div style=\"padding: 1.1rem;font-weight: bold;font-size: calc(1.2rem + 0.1vw);\">"
+                                      "<a href=\"./../\">"
+                                      "🔙 Go to back homepage to see all rankings"
+                                      "</a>"
+                                      "</div>",
+                                      features="html.parser")
+            soup.select_one(".TablePage").insert(0, new_soup5)
+
+            pass
+        elif "_indice.html" in url and "sotto_indice.html" not in url:
+            return None
+        elif "_sotto_" in url and "sotto_indice.html" not in url:
+            # da rimuovere la colonna matricola
+            tab = soup.find("table", {"class": "TableDati"})
+            soup.select(".HeadColumn1")[1].decompose()
+            rows = tab.select_one(".TableDati-tbody")
+            for row in rows:
+                row.select(".Dati1")[1].decompose()
+
+            return soup
+
+        elif "_grad_" in url and "_M.html" in url:
+            # da rimuovere la colonna matricola (prima colonna)
+            tab = soup.find("table", {"class": "TableDati"})
+            soup.select_one(".HeadColumn1").decompose()
+            rows = tab.select_one(".TableDati-tbody")
+            for row in rows:
+                row.select_one(".Dati1").decompose()
+
+            return soup
 
         return soup
 
-    elif "_grad_" in url and "_M.html" in url:
-        # da rimuovere la colonna matricola (prima colonna)
-        tab = soup.find("table", {"class": "TableDati"})
-        soup.select_one(".HeadColumn1").decompose()
-        rows = tab.select_one(".TableDati-tbody")
-        for row in rows:
-            row.select_one(".Dati1").decompose()
+    except Exception as e7:
+        print("Failed to download (07) [" + url + "], " + str(e7))
 
-        return soup
 
-    return soup
-    pass
+    return None
 
 
 def getCorso(soup):
@@ -116,17 +123,31 @@ def downloadAndAddChildrenUrl1(i2, start2, i_url):
     global url_global
     global success_download
 
-    elem2 = to_download[i2]
-    url = elem2["url"]
     try:
-        soup = BeautifulSoup(urllib.request.urlopen(url), features="html.parser")
-        soup = filterLink(soup, url)
-        to_download[i2]["content"] = soup
-        if i2 == 0:
-            url_global[i_url]["corso"] = getCorso(soup)
-            url_global[i_url]["fase"] = getFase(soup)
+        elem2 = to_download[i2]
+        url = elem2["url"]
+        soup = None
+        try:
+            soup = BeautifulSoup(urllib.request.urlopen(url), features="html.parser")
+        except Exception as e2:
+            print("Failed to download (02) [" + url + "], " + str(e2))
 
-        if soup is not None:
+        if soup is None:
+            return
+
+        try:
+            soup = filterLink(soup, url)
+            to_download[i2]["content"] = soup
+            if i2 == 0:
+                url_global[i_url]["corso"] = getCorso(soup)
+                url_global[i_url]["fase"] = getFase(soup)
+        except Exception as e6:
+            print("Failed to download (06) [" + url + "], " + str(e6))
+
+        if soup is None:
+            return
+
+        try:
             success_download += 1
             for link in soup.find_all('a', href=True):
                 try:
@@ -135,11 +156,13 @@ def downloadAndAddChildrenUrl1(i2, start2, i_url):
                         addLink(link)
                     else:
                         print("Link not valid! " + link + "\n")
-                except Exception as e2:
-                    print("Failed to download (01) [" + url + "], " + str(e2))
+                except Exception as e1:
+                    print("Failed to download (01) [" + url + "], " + str(e1))
+        except Exception as e3:
+            print("Failed to download (03) [" + url + "], " + str(e3))
+    except Exception as e4:
+        print("Failed to download (04) [" + i2 + "], " + str(e4))
 
-    except Exception as e1:
-        print("Failed to download (02) [" + url + "], " + str(e1))
     pass
 
 
