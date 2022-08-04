@@ -687,7 +687,7 @@ if __name__ == '__main__':
 
     index_links = []
 
-    redo = False
+    redo = True
 
     i = 0
     while i < len(url_global):
