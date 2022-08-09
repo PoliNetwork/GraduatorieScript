@@ -365,11 +365,9 @@ def getBruteforcedList(bruteforceEnabled):
     return listResult
 
 
-def getIfPresent(elem2):
-    global url_global
-
+def getIfPresent(elem2, url_ret):
     url = str(elem2["url"])
-    for item in url_global:
+    for item in url_ret:
         url2 = str(item["url"])
 
         if url == url2:
@@ -383,24 +381,25 @@ crawl_links = []
 
 
 def crawl(start2, url="", i=0, linkStart=None):
-    global url_global
     global crawl_links
 
     if i > 2:
-        return
+        return []
     if not url:
         url = "https://www.polimi.it/in-evidenza"
 
     url = urljoin(linkStart, url)
 
     if crawl_links.__contains__(url):
-        return
+        return []
 
     if linkStart is not None:
         if not str(url).startswith(linkStart):
-            return
+            return []
 
     crawl_links.append(url)
+
+    url_ret = []
 
     try:
         soup = BeautifulSoup(urllib.request.urlopen(url), features="html.parser")
@@ -410,17 +409,21 @@ def crawl(start2, url="", i=0, linkStart=None):
             links.append(link.get('href'))
 
         for link in links:
-            crawl(start2, link, i + 1, url)
+            r1 = crawl(start2, link, i + 1, url)
+            for r2 in r1:
+                isPresent = getIfPresent(r2, url_ret)
+                if not isPresent:
+                    url_ret.append(r2)
 
             if str(link).startswith(start2):
                 elem2 = {"url": link, "year": getYearFromString(link)}
-                isPresent = getIfPresent(elem2)
+                isPresent = getIfPresent(elem2, url_ret)
                 if not isPresent:
-                    url_global.append(elem2)
+                    url_ret.append(elem2)
     except:
         pass
 
-    pass
+    return url_ret
 
 
 def generateUrl(start2, bruteforceEnableLocal):
@@ -459,8 +462,17 @@ def generateUrl(start2, bruteforceEnableLocal):
 
     # CRAWL LINKS FROM POLIMI WEBSITE
     print("Number of URLs before crawl: " + str(len(url_global)))
-    crawl(start2)
-    print("Number of URLs after crawl: " + str(len(url_global)))
+    try:
+        crawled = crawl(start2)
+        print("Number of URLs crawled: " + str(len(crawled)))
+
+        for crawled_single in crawled:
+            isPresent = getIfPresent(crawled_single, url_global)
+            if not isPresent:
+                url_global.append(crawled_single)
+    except Exception as eCrawl:
+        print("eCrawl " + str(eCrawl))
+        pass
 
     # PRINT URL TO DOWNLOAD
     print("starting printing url to download")
