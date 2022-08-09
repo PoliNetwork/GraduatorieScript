@@ -710,7 +710,7 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    version = 11
+    version = 12
     print("starting. version: " + str(version))
 
     global url_global
