@@ -495,9 +495,13 @@ def alreadyPresent(item, list_index):
     link = item.attrs['href']
     link = str(link)[1:]
     for item2 in list_index:
-        link2 = item2['url']
-        if str(link2).endswith(link):
-            return True
+        link2 = None
+        try:
+            link2 = item2['url']
+            if str(link2).endswith(link):
+                return True
+        except:
+            pass
 
     return False
 
@@ -521,7 +525,7 @@ def getHtml(recent_param, previous_param):
             year = int(item["year"])
         except:
             pass
-        
+
         if year == currentYear:
             if not alreadyPresent(item, recent_list):
                 recent_list.append(item)
@@ -741,7 +745,7 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    version = 13
+    version = 14
     print("starting. version: " + str(version))
 
     global url_global
