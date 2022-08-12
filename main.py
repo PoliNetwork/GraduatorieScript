@@ -516,7 +516,12 @@ def getHtml(recent_param, previous_param):
             previous_param.append(item)
 
     for item in previous_param:
-        year = int(item["year"])
+        year = 0
+        try:
+            year = int(item["year"])
+        except:
+            pass
+        
         if year == currentYear:
             if not alreadyPresent(item, recent_list):
                 recent_list.append(item)
