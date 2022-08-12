@@ -502,6 +502,86 @@ def alreadyPresent(item, list_index):
     return False
 
 
+def getHtml(recent_param, previous_param):
+    recent_list = []
+    previous_list = []
+    currentYear = int(datetime.datetime.now().year)
+
+    # separate different years in categories (recent, previous)
+    for item in recent_param:
+        year = int(item["year"])
+        if year == currentYear:
+            recent_list.append(item)
+        else:
+            previous_param.append(item)
+
+    for item in previous_param:
+        year = int(item["year"])
+        if year == currentYear:
+            if not alreadyPresent(item, recent_list):
+                recent_list.append(item)
+        else:
+            if not alreadyPresent(item, previous_list):
+                previous_list.append(item)
+
+    # write
+    html = "<html>\n"
+    html += "<head>\n"
+    html += "<meta charset='UTF-8'>\n"
+    html += "<meta name='description' content='Graduatorie degli anni passati per le matricole del Politecnico di " \
+            "Milano, archiviate by PoliNetwork Rankings'>\n "
+    html += "<meta name='keywords' content='Graduatorie, Rankings, Polimi, Matricole, Politecnico, Milano, " \
+            "PoliNetwork, Passate, Storico'>\n "
+    html += "<style>" \
+            " li { padding:0.5rem;border: 1px solid;margin: 1rem;border-radius: 1rem; } " \
+            "ul{padding-left: 0.1rem;}" \
+            " body{overflow: auto;padding:0.5rem;}" \
+            " h1{overflow: auto;font-size: calc(1.25rem + 1.25vw);}" \
+            "h4{overflow:auto;}" \
+            "</style>\n"
+    html += "</head>\n"
+    html += "<body>\n"
+    html += "<h1>\n"
+    html += "Graduatorie/Rankings\n"
+    html += "</h1>\n"
+    html += "<div>\n"
+    html += "<br /><p>Recent rankings:</p><br />\n"
+    html += "<ul>\n"
+    for item in recent_list:
+        html += "<li>\n"
+        link = "." + item["path"]
+        html += "<a href='" + link + "'>\n"
+        if "corso" in item:
+            html += str(item["year"]) + " " + str(item["corso"]) + " " + str(item["fase"]) + "\n"
+        else:
+            html += str(item["year"]) + "\n"
+        html += "</a>\n"
+        html += "</li>\n"
+        pass
+    html += "</ul>\n"
+    html += "<br /><p>Previous rankings:</p><br />\n"
+    html += "<ul>\n"
+    print("len(previous_list):")
+    print(len(previous_list))
+    for item in previous_list:
+        if not alreadyPresent(item, recent_list):
+            html += "<li>\n"
+            htmls = str(item)
+            html += htmls
+            html += "</li>\n"
+    html += "</ul>\n"
+    html += "</div>\n"
+    html += "<br />\n"
+    html += "<h4>\n"
+    html += "Website by "
+    html += "<a href='https://polinetwork.org/'>"
+    html += "PoliNetwork"
+    html += "</a>\n"
+    html += "</h4>\n"
+    html += "</body>\n</html>\n"
+    return html
+
+
 def write_index(index_links2, base_output2, index_previous_links):
     # sort
     index_links2.sort(key=lambda x: x["year"], reverse=True)
@@ -538,61 +618,7 @@ def write_index(index_links2, base_output2, index_previous_links):
 
     index_links2.sort(key=lambda x: x["year"], reverse=True)
 
-    # write
-    html = "<html>\n"
-    html += "<head>\n"
-    html += "<meta charset='UTF-8'>\n"
-    html += "<meta name='description' content='Graduatorie degli anni passati per le matricole del Politecnico di " \
-            "Milano, archiviate by PoliNetwork Rankings'>\n "
-    html += "<meta name='keywords' content='Graduatorie, Rankings, Polimi, Matricole, Politecnico, Milano, " \
-            "PoliNetwork'>\n "
-    html += "<style>" \
-            " li { padding:0.5rem;border: 1px solid;margin: 1rem;border-radius: 1rem; } " \
-            "ul{padding-left: 0.1rem;}" \
-            " body{overflow: auto;padding:0.5rem;}" \
-            " h1{overflow: auto;font-size: calc(1.25rem + 1.25vw);}" \
-            "h4{overflow:auto;}" \
-            "</style>\n"
-    html += "</head>\n"
-    html += "<body>\n"
-    html += "<h1>\n"
-    html += "Graduatorie/Rankings\n"
-    html += "</h1>\n"
-    html += "<div>\n"
-    html += "<br /><p>Recent rankings:</p><br />\n"
-    html += "<ul>\n"
-    for item in index_links2:
-        html += "<li>\n"
-        link = "." + item["path"]
-        html += "<a href='" + link + "'>\n"
-        if "corso" in item:
-            html += str(item["year"]) + " " + str(item["corso"]) + " " + str(item["fase"]) + "\n"
-        else:
-            html += str(item["year"]) + "\n"
-        html += "</a>\n"
-        html += "</li>\n"
-        pass
-    html += "</ul>\n"
-    html += "<br /><p>Previous rankings:</p><br />\n"
-    html += "<ul>\n"
-    print("len(index_previous_links):")
-    print(len(index_previous_links))
-    for item in index_previous_links:
-        if not alreadyPresent(item, index_links2):
-            html += "<li>\n"
-            htmls = str(item)
-            html += htmls
-            html += "</li>\n"
-    html += "</ul>\n"
-    html += "</div>\n"
-    html += "<br />\n"
-    html += "<h4>\n"
-    html += "Website by "
-    html += "<a href='https://polinetwork.org/'>"
-    html += "PoliNetwork"
-    html += "</a>\n"
-    html += "</h4>\n"
-    html += "</body>\n</html>\n"
+    html = getHtml(index_links2, index_previous_links)
 
     write_html(html, base_output2)
 
