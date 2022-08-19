@@ -506,6 +506,66 @@ def alreadyPresent(item, list_index):
     return False
 
 
+item1Big = 1
+item2Big = -1
+itemSame = 0
+
+
+def compare(item1, item2):
+    if item1 is None and item2 is None:
+        return itemSame
+
+    if item1 is None:
+        return item2Big
+    if item2 is None:
+        return item1Big
+
+    try:
+        link1 = item1["link"]
+        link2 = item2["link"]
+
+        if link1 is None and link2 is None:
+            pass
+        elif link1 is None:
+            return item2Big
+        elif link2 is None:
+            return item1Big
+        elif link1 < link2:
+            return item2Big
+        elif link2 < link1:
+            return item1Big
+        else:
+            return itemSame
+    except:
+        pass
+
+    try:
+        link1 = item1["year"]
+        link2 = item2["year"]
+
+        if link1 is None and link2 is None:
+            pass
+        elif link1 is None:
+            return item2Big
+        elif link2 is None:
+            return item1Big
+        elif link1 < link2:
+            return item2Big
+        elif link2 < link1:
+            return item1Big
+        else:
+            return itemSame
+    except:
+        pass
+
+    return itemSame
+
+
+def sortList(listToSort):
+    result = listToSort.sort(key=compare)
+    return result
+
+
 def getHtml(recent_param, previous_param):
     recent_list = []
     previous_list = []
@@ -532,6 +592,9 @@ def getHtml(recent_param, previous_param):
         else:
             if not alreadyPresent(item, previous_list):
                 previous_list.append(item)
+
+    recent_list = sortList(recent_list)
+    previous_list = sortList(previous_list)
 
     # write
     html = "<html>\n"
@@ -745,7 +808,7 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    version = 14
+    version = 15
     print("starting. version: " + str(version))
 
     global url_global
