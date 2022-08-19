@@ -46,6 +46,11 @@ def filterLink(soup, url):
     if not soup:
         return None
 
+    urlSplit = str(url).split("/")
+    urlSplit = [x for x in urlSplit if str(x).strip()]
+    if len(urlSplit) < 2:
+        return None
+
     try:
         url = str(url)
 
@@ -511,6 +516,29 @@ item2Big = -1
 itemSame = 0
 
 
+def getSubItem(item, listNames):
+    try:
+        for listItem in listNames:
+            try:
+                r = item[listItem]
+                if r:
+                    return r
+            except:
+                pass
+
+            try:
+                r = item.attrs[listItem]
+                if r:
+                    return r
+            except:
+                pass
+
+    except:
+        pass
+
+    return None
+
+
 def compare(item1, item2):
     if item1 is None and item2 is None:
         return itemSame
@@ -521,8 +549,8 @@ def compare(item1, item2):
         return item1Big
 
     try:
-        link1 = item1["link"]
-        link2 = item2["link"]
+        link1 = getSubItem(item1, ["link", "url", "path", "href"])
+        link2 = getSubItem(item2, ["link", "url", "path", "href"])
 
         if link1 is None and link2 is None:
             pass
@@ -540,8 +568,8 @@ def compare(item1, item2):
         pass
 
     try:
-        link1 = item1["year"]
-        link2 = item2["year"]
+        link1 = getSubItem(item1, ["year"])
+        link2 = getSubItem(item2, ["year"])
 
         if link1 is None and link2 is None:
             pass
@@ -562,8 +590,28 @@ def compare(item1, item2):
 
 
 def sortList(listToSort):
-    result = listToSort.sort(key=compare)
-    return result
+    try:
+        i = 0
+        lengthList = len(listToSort)
+        while i < lengthList:
+
+
+            j = 0
+            while j < lengthList - 1:
+
+                resultCompare = compare(listToSort[j], listToSort[j + 1])
+                if resultCompare > 0:
+                    tmp = listToSort[j]
+                    listToSort[j] = listToSort[j + 1]
+                    listToSort[j + 1] = tmp
+
+                j = j + 1
+
+            i = i + 1
+    except:
+        return listToSort
+
+    return listToSort
 
 
 def getHtml(recent_param, previous_param):
