@@ -600,7 +600,7 @@ def sortList(listToSort):
             while j < lengthList - 1:
 
                 resultCompare = compare(listToSort[j], listToSort[j + 1])
-                if resultCompare > 0:
+                if resultCompare < 0:
                     tmp = listToSort[j]
                     listToSort[j] = listToSort[j + 1]
                     listToSort[j + 1] = tmp
@@ -856,7 +856,7 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    version = 16
+    version = 17
     print("starting. version: " + str(version))
 
     global url_global
