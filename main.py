@@ -693,15 +693,21 @@ def getHtml(recent_param, previous_param):
     html += "<br /><p>Recent rankings:</p><br />\n"
     html += "<ul>\n"
     for item in recent_list:
-        html += "<li>\n"
-        link = "." + item["path"]
-        html += "<a href='" + link + "'>\n"
-        if "corso" in item:
-            html += str(item["year"]) + " " + str(item["corso"]) + " " + str(item["fase"]) + "\n"
-        else:
-            html += str(item["year"]) + "\n"
-        html += "</a>\n"
-        html += "</li>\n"
+        try:
+            html2 = ""
+            html2 += "<li>\n"
+            link = "." + item["path"]
+            html2 += "<a href='" + link + "'>\n"
+            if "corso" in item:
+                html2 += str(item["year"]) + " " + str(item["corso"]) + " " + str(item["fase"]) + "\n"
+            else:
+                html2 += str(item["year"]) + "\n"
+            html2 += "</a>\n"
+            html2 += "</li>\n"
+            html += html2
+        except:
+            html += str(item)
+            pass
         pass
     html += "</ul>\n"
     html += "<br /><p>Previous rankings:</p><br />\n"
@@ -881,7 +887,7 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    version = 18
+    version = 19
     print("starting. version: " + str(version))
 
     global url_global
