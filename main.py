@@ -595,7 +595,6 @@ def sortList(listToSort):
         lengthList = len(listToSort)
         while i < lengthList:
 
-
             j = 0
             while j < lengthList - 1:
 
@@ -614,6 +613,29 @@ def sortList(listToSort):
     return listToSort
 
 
+def getYearFromItem(item):
+    try:
+        year = item["year"]
+        if year:
+            return year
+    except:
+        pass
+
+    currentYear = int(datetime.datetime.now().year)
+    i = currentYear - 10
+
+    itemStr = str(item)
+    while i <= currentYear:
+
+        yearS = str(i)
+        if yearS in itemStr:
+            return i
+
+        i = i + 1
+
+    return None
+
+
 def getHtml(recent_param, previous_param):
     recent_list = []
     previous_list = []
@@ -621,7 +643,10 @@ def getHtml(recent_param, previous_param):
 
     # separate different years in categories (recent, previous)
     for item in recent_param:
-        year = int(item["year"])
+        try:
+            year = int(getYearFromItem(item))
+        except:
+            pass
         if year == currentYear:
             recent_list.append(item)
         else:
@@ -630,7 +655,7 @@ def getHtml(recent_param, previous_param):
     for item in previous_param:
         year = 0
         try:
-            year = int(item["year"])
+            year = int(getYearFromItem(item))
         except:
             pass
 
@@ -856,7 +881,7 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    version = 17
+    version = 18
     print("starting. version: " + str(version))
 
     global url_global
