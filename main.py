@@ -497,16 +497,17 @@ def write_html(html, base_output2):
 
 def alreadyPresent(item, list_index):
     pass
-    link = item.attrs['href']
+    link = getSubItem(item, ["href", "url", "path", "link"])
     link = str(link)[1:]
-    for item2 in list_index:
-        link2 = None
-        try:
-            link2 = item2['url']
-            if str(link2).endswith(link):
-                return True
-        except:
-            pass
+    if link and len(link) > 0:
+        for item2 in list_index:
+
+            try:
+                link2 = getSubItem(item2, ["href", "url", "path", "link"])
+                if link2 and len(link2) > 0 and str(link2).endswith(link):
+                    return True
+            except:
+                pass
 
     return False
 
@@ -636,9 +637,42 @@ def getYearFromItem(item):
     return None
 
 
+def itemToString(item):
+    html = ""
+
+    try:
+        html2 = ""
+        html2 += "<li>\n"
+        link = "." + getSubItem(item, ["path", "link", "url", "href"])
+        html2 += "<a href='" + link + "'>\n"
+        html2 += str(item["year"])
+        if "corso" in item:
+            html2 += " " + str(item["corso"])
+        if "fase" in item:
+            html2 += " " + str(item["fase"])
+
+        html2 += "\n"
+        html2 += "</a>\n"
+        html2 += "</li>\n"
+        html += html2
+    except:
+        html3 = str(item).strip()
+
+        if not html3.startswith("<li>"):
+            html3 = "<li>" + html3
+
+        if not html3.endswith("</li>"):
+            html3 = html3 + "</li>"
+
+        html += html3 + "\n"
+
+    return html
+
+
 def getHtml(recent_param, previous_param):
     recent_list = []
     previous_list = []
+    duplicates_list = []
     currentYear = int(datetime.datetime.now().year)
 
     # separate different years in categories (recent, previous)
@@ -662,12 +696,24 @@ def getHtml(recent_param, previous_param):
         if year == currentYear:
             if not alreadyPresent(item, recent_list):
                 recent_list.append(item)
+            else:
+                duplicates_list.append(item)
         else:
             if not alreadyPresent(item, previous_list):
                 previous_list.append(item)
+            else:
+                duplicates_list.append(item)
 
     recent_list = sortList(recent_list)
     previous_list = sortList(previous_list)
+    duplicates_list = sortList(duplicates_list)
+
+    print("len(recent_list):")
+    print(len(recent_list))
+    print("len(previous_list):")
+    print(len(previous_list))
+    print("len(duplicates_list):")
+    print(len(duplicates_list))
 
     # write
     html = "<html>\n"
@@ -690,48 +736,23 @@ def getHtml(recent_param, previous_param):
     html += "Graduatorie/Rankings\n"
     html += "</h1>\n"
     html += "<div>\n"
-    html += "<br /><p>Recent rankings:</p><br />\n"
-    html += "<ul>\n"
-    for item in recent_list:
-        try:
-            html2 = ""
-            html2 += "<li>\n"
-            link = "." + getSubItem(item, ["path", "link", "url", "href"])
-            html2 += "<a href='" + link + "'>\n"
-            html2 += str(item["year"])
-            if "corso" in item:
-                html2 += " " + str(item["corso"])
-            if "fase" in item:
-                html2 += " " + str(item["fase"])
 
-            html2 += "\n"
-            html2 += "</a>\n"
-            html2 += "</li>\n"
-            html += html2
-        except:
-            html3 = str(item).strip()
+    listToPrint = [
+        {"list": recent_list, "title": "Recent rankings"},
+        {"list": previous_list, "title": "Previous rankings"},
+        {"list": duplicates_list, "title": "Duplicate rankings"},
+    ]
 
-            if not html3.startswith("<li>"):
-                html3 = "<li>" + html3
+    for itemListToPrint in listToPrint:
 
-            if not html3.endswith("</li>"):
-                html3 = html3 + "</li>"
+        html += "<br /><p>"
+        html += itemListToPrint["title"]
+        html += ":</p><br />\n"
+        html += "<ul>\n"
+        for item in itemListToPrint["list"]:
+            html += itemToString(item)
+        html += "</ul>\n"
 
-            html += html3 + "\n"
-            pass
-        pass
-    html += "</ul>\n"
-    html += "<br /><p>Previous rankings:</p><br />\n"
-    html += "<ul>\n"
-    print("len(previous_list):")
-    print(len(previous_list))
-    for item in previous_list:
-        if not alreadyPresent(item, recent_list):
-            html += "<li>\n"
-            htmls = str(item)
-            html += htmls
-            html += "</li>\n"
-    html += "</ul>\n"
     html += "</div>\n"
     html += "<br />\n"
     html += "<h4>\n"
@@ -853,7 +874,7 @@ def find_index(soup):
             for item2 in item.contents:
                 try:
                     pass
-                    link = item2.attrs['href']
+                    link = getSubItem(item2, ["href", "url", "link"])
                     print(link)
                     results.append(item2)
 
@@ -874,6 +895,7 @@ def getLinksIndex(base_output):
         with open(base_output + "\\index.html") as fp:
             soup = BeautifulSoup(fp, 'html.parser')
 
+        print("Already in index [end]")
         return find_index(soup)
 
     except Exception as e:
@@ -888,6 +910,7 @@ def getLinksIndex(base_output):
         content = f.read()
         soup = BeautifulSoup(content, 'html.parser')
 
+        print("Already in index [end]")
         return find_index(soup)
 
     except Exception as e:
@@ -901,7 +924,7 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    version = 20
+    version = 23
     print("starting. version: " + str(version))
 
     global url_global
