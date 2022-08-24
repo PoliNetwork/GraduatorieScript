@@ -696,17 +696,28 @@ def getHtml(recent_param, previous_param):
         try:
             html2 = ""
             html2 += "<li>\n"
-            link = "." + item["path"]
+            link = "." + getSubItem(item, ["link", "url", "path", "href"])
             html2 += "<a href='" + link + "'>\n"
+            html2 += str(item["year"])
             if "corso" in item:
-                html2 += str(item["year"]) + " " + str(item["corso"]) + " " + str(item["fase"]) + "\n"
-            else:
-                html2 += str(item["year"]) + "\n"
+                html2 += " " + str(item["corso"])
+            if "fase" in item:
+                html2 += " " + str(item["fase"])
+
+            html2 += "\n"
             html2 += "</a>\n"
             html2 += "</li>\n"
             html += html2
         except:
-            html += str(item)
+            html3 = str(item).strip()
+
+            if not html3.startswith("<li>"):
+                html3 = "<li>" + html3
+
+            if not html3.endswith("</li>"):
+                html3 = html3 + "</li>"
+
+            html += html3 + "\n"
             pass
         pass
     html += "</ul>\n"
@@ -887,7 +898,7 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    version = 19
+    version = 20
     print("starting. version: " + str(version))
 
     global url_global
