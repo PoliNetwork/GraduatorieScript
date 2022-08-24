@@ -861,6 +861,9 @@ def find_index(soup):
                     pass
     except:
         pass
+
+    print("Find index: results size is " + str(len(results)))
+
     return results
 
 
