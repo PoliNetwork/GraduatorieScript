@@ -677,6 +677,7 @@ def getHtml(recent_param, previous_param):
 
     # separate different years in categories (recent, previous)
     for item in recent_param:
+        year = -1
         try:
             year = int(getYearFromItem(item))
         except:
@@ -687,7 +688,7 @@ def getHtml(recent_param, previous_param):
             previous_param.append(item)
 
     for item in previous_param:
-        year = 0
+        year = -1
         try:
             year = int(getYearFromItem(item))
         except:
@@ -750,7 +751,11 @@ def getHtml(recent_param, previous_param):
         html += ":</p><br />\n"
         html += "<ul>\n"
         for item in itemListToPrint["list"]:
-            html += itemToString(item)
+            html4 = itemToString(item)
+            if html4 and len(html4) > 10:
+                html5 = html4.strip()
+                if html5 and len(html5) > 10:
+                    html += html5 + "\n"
         html += "</ul>\n"
 
     html += "</div>\n"
@@ -924,7 +929,7 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    version = 23
+    version = 24
     print("starting. version: " + str(version))
 
     global url_global
