@@ -705,6 +705,12 @@ def getHtml(recent_param, previous_param):
             else:
                 duplicates_list.append(item)
 
+    duplicates_list2 = []
+    for item in duplicates_list:
+        if not alreadyPresent(item, previous_list) and not alreadyPresent(item, recent_list):
+            duplicates_list2.append(item)
+    duplicates_list = duplicates_list2
+
     recent_list = sortList(recent_list)
     previous_list = sortList(previous_list)
     duplicates_list = sortList(duplicates_list)
@@ -745,18 +751,18 @@ def getHtml(recent_param, previous_param):
     ]
 
     for itemListToPrint in listToPrint:
-
-        html += "<br /><p>"
-        html += itemListToPrint["title"]
-        html += ":</p><br />\n"
-        html += "<ul>\n"
-        for item in itemListToPrint["list"]:
-            html4 = itemToString(item)
-            if html4 and len(html4) > 10:
-                html5 = html4.strip()
-                if html5 and len(html5) > 10:
-                    html += html5 + "\n"
-        html += "</ul>\n"
+        if len(itemListToPrint["list"]) > 0:
+            html += "<br /><p>"
+            html += itemListToPrint["title"]
+            html += ":</p><br />\n"
+            html += "<ul>\n"
+            for item in itemListToPrint["list"]:
+                html4 = itemToString(item)
+                if html4 and len(html4) > 10:
+                    html5 = html4.strip()
+                    if html5 and len(html5) > 10:
+                        html += html5 + "\n"
+            html += "</ul>\n"
 
     html += "</div>\n"
     html += "<br />\n"
@@ -929,7 +935,7 @@ def getLinksIndex(base_output):
 # main
 if __name__ == '__main__':
 
-    version = 24
+    version = 25
     print("starting. version: " + str(version))
 
     global url_global
