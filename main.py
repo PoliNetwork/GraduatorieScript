@@ -696,7 +696,7 @@ def getHtml(recent_param, previous_param):
         try:
             html2 = ""
             html2 += "<li>\n"
-            link = "." + getSubItem(item, ["link", "url", "path", "href"])
+            link = "." + getSubItem(item, ["path", "link", "url", "href"])
             html2 += "<a href='" + link + "'>\n"
             html2 += str(item["year"])
             if "corso" in item:
