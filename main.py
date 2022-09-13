@@ -457,7 +457,8 @@ def generateUrl(start2, bruteforceEnableLocal):
     manual_urls = [
         "2022_20002_46h3_html/2022_20002_generale.html",
         "2022_20102_ab23_html/2022_20102_generale.html",
-        "2022_20103_355c_html/2022_20103_generale.html"
+        "2022_20103_355c_html/2022_20103_generale.html",
+        "2022_20041_4a1b_html/2022_20041_generale.html"
     ]
 
     for m in manual_urls:
