@@ -465,34 +465,26 @@ def generateUrl(start2, bruteforceEnableLocal):
         elem2 = {"url": single, "year": getYearFromString(m)}
         url_global.append(elem2)
 
-    # CRAWL LINKS FROM POLIMI WEBSITE
-    print("Number of URLs before crawl polimi: " + str(len(url_global)))
-    try:
-        crawled = crawl(start2, 'https://www.polimi.it/in-evidenza');
-        print("Number of URLs crawled polimi: " + str(len(crawled)))
+    to_crawl = [
+        'https://www.polimi.it/in-evidenza',
+        'https://www.poliorientami.polimi.it/come-si-accede/design/punteggi-esiti-e-graduatorie/'
+    ]
 
-        for crawled_single in crawled:
-            isPresent = getIfPresent(crawled_single, url_global)
-            if not isPresent:
-                url_global.append(crawled_single)
-    except Exception as eCrawl:
-        print("eCrawl polimi " + str(eCrawl))
-        pass
-    
-    
-    # CRAWL LINKS FROM POLIORIENTAMI WEBSITE
-    print("Number of URLs before crawl orientami: " + str(len(url_global)))
-    try:
-        crawled = crawl(start2, 'https://www.poliorientami.polimi.it/come-si-accede/design/punteggi-esiti-e-graduatorie/');
-        print("Number of URLs crawled orientami: " + str(len(crawled)))
+    for to_crawl2 in to_crawl:
 
-        for crawled_single in crawled:
-            isPresent = getIfPresent(crawled_single, url_global)
-            if not isPresent:
-                url_global.append(crawled_single)
-    except Exception as eCrawl:
-        print("eCrawl orientami " + str(eCrawl))
-        pass
+        # CRAWL LINKS
+        print("Number of URLs before crawl " + to_crawl2 + ": " + str(len(url_global)))
+        try:
+            crawled = crawl(start2, to_crawl2)
+            print("Number of URLs crawled " + to_crawl2 + ": " + str(len(crawled)))
+
+            for crawled_single in crawled:
+                isPresent = getIfPresent(crawled_single, url_global)
+                if not isPresent:
+                    url_global.append(crawled_single)
+        except Exception as eCrawl:
+            print("eCrawl " + to_crawl2 + " " + str(eCrawl))
+            pass
 
     # PRINT URL TO DOWNLOAD
     print("starting printing url to download")
