@@ -268,6 +268,11 @@ def executeDownload(url, i2, start2, base_output2, only_first):
     time.sleep(1)
 
     url2 = url[i2]["url"]
+    type ="html"
+    try:
+        type = url[i2]["type"]
+    except:
+        pass
 
     to_download = []
     success_download = 0
@@ -304,8 +309,12 @@ def getYearFromString(m):
                 pass
 
     m2 = m[0:4]
-    return int(m2)
-    pass
+    try:
+        return int(m2)
+    except:
+        pass
+
+    return None
 
 
 def finished(words, limit):
@@ -371,12 +380,17 @@ def getBruteforcedList(bruteforceEnabled):
 
 
 def getIfPresent(elem2, url_ret):
-    url = str(elem2["url"])
-    for item in url_ret:
-        url2 = str(item["url"])
+    try:
+        url = str(elem2["url"])
+        type_url_local = str(elem2["type"])
+        for item in url_ret:
+            url2 = str(item["url"])
+            type_url_other = str(item["type"])
 
-        if url == url2:
-            return True
+            if url == url2 and type_url_local == type_url_other:
+                return True
+    except Exception as ex:
+        print(ex)
 
     return False
 
@@ -385,7 +399,7 @@ global crawl_links
 crawl_links = []
 
 
-def crawl(start2, url="", i=0, linkStart=None):
+def crawl(start2, url="", i=0, linkStart=None, type_url=None):
     global crawl_links
 
     if i > 2:
@@ -411,17 +425,23 @@ def crawl(start2, url="", i=0, linkStart=None):
 
         links = []
         for link in soup.findAll('a'):
-            links.append(link.get('href'))
+            link_found = link.get('href')
+            if link_found is not None and (not links.__contains__(link_found)):
+                links.append(link_found)
 
+        ZZ = 0
         for link in links:
-            r1 = crawl(start2, link, i + 1, url)
+            r1 = crawl(start2, link, i + 1, url, type_url)
             for r2 in r1:
                 isPresent = getIfPresent(r2, url_ret)
                 if not isPresent:
                     url_ret.append(r2)
 
-            if str(link).startswith(start2):
-                elem2 = {"url": link, "year": getYearFromString(link)}
+            urljoined = urljoin(url, link)
+            if str(link).startswith(start2) or urljoined.startswith(url):
+                elem2 = {"url": url,
+                         "year": getYearFromString(link),
+                         "type": type_url}
                 isPresent = getIfPresent(elem2, url_ret)
                 if not isPresent:
                     url_ret.append(elem2)
@@ -467,24 +487,29 @@ def generateUrl(start2, bruteforceEnableLocal):
         url_global.append(elem2)
 
     to_crawl = [
-        'https://www.polimi.it/in-evidenza',
-        'https://www.poliorientami.polimi.it/come-si-accede/design/punteggi-esiti-e-graduatorie/'
+        {"url": 'https://www.polimi.it/in-evidenza',
+         "type": "html"},
+        {"url":
+             'https://www.poliorientami.polimi.it/come-si-accede/design/punteggi-esiti-e-graduatorie/',
+         "type": "html"},
+        {"url": 'https://www.design.polimi.it/it/lista-news',
+         "type": "pdf"}
     ]
 
     for to_crawl2 in to_crawl:
 
         # CRAWL LINKS
-        print("Number of URLs before crawl " + to_crawl2 + ": " + str(len(url_global)))
+        print("Number of URLs before crawl " + to_crawl2["url"] + ": " + str(len(url_global)))
         try:
-            crawled = crawl(start2, to_crawl2)
-            print("Number of URLs crawled " + to_crawl2 + ": " + str(len(crawled)))
+            crawled = crawl(start2, to_crawl2["url"], 0, None, to_crawl2["type"])
+            print("Number of URLs crawled " + to_crawl2["url"] + ": " + str(len(crawled)))
 
             for crawled_single in crawled:
                 isPresent = getIfPresent(crawled_single, url_global)
                 if not isPresent:
                     url_global.append(crawled_single)
         except Exception as eCrawl:
-            print("eCrawl " + to_crawl2 + " " + str(eCrawl))
+            print("eCrawl " + to_crawl2["url"] + " " + str(eCrawl))
             pass
 
     # PRINT URL TO DOWNLOAD
@@ -954,6 +979,7 @@ if __name__ == '__main__':
         base_output.append("D:\\git\\Polimi\\polinetwork.github.io\\graduatorie")
         base_output.append("C:\\git\\polinetwork.github.io\\graduatorie")
         base_output.append("D:\\git\\PoliNetwork\\Rankings\\docs")
+        base_output.append("C:\\git\\PoliNetwork\\Rankings\\docs")
     else:
         base_output.append(sys.argv[1])
     start_len = len(start)
