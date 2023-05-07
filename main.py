@@ -911,12 +911,13 @@ def getCorsoFase(elem2):
 
     path_2 = str(path_2)
 
-    with open(path_2, 'r') as f:
-        contents = f.read()
+    if os.path.exists(path_2):
+        with open(path_2, 'r') as f:
+            contents = f.read()
 
-        soup = BeautifulSoup(contents, features="html.parser")
+            soup = BeautifulSoup(contents, features="html.parser")
 
-        return getCorso(soup), getFase(soup)
+            return getCorso(soup), getFase(soup)
 
     return None, None
 
