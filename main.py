@@ -886,7 +886,7 @@ def write_index(index_links2, base_output2, index_previous_links):
 
         i2 += 1
 
-    index_links2.sort(key=lambda x: x["year"], reverse=True)
+    index_links2.sort(key=getYear, reverse=True)
 
     html = getHtml(index_links2, index_previous_links)
 
