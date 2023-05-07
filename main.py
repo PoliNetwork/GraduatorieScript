@@ -26,6 +26,8 @@ list_already_done = []
 list_error_download = []
 list_download_completed = []
 
+saltGlobal = "saltPoliNetwork"
+
 
 # methods
 def addLink(link):
@@ -97,7 +99,7 @@ def filterLink(soup, url):
                 for row in rows:
                     # facciamo hash della colonna matricola
                     riga_matricola = row.select(".Dati1")[1]
-                    sha256_hash = hashlib.sha256(riga_matricola.string.encode()).hexdigest()
+                    sha256_hash = hashlib.sha256((riga_matricola.string + saltGlobal).encode()).hexdigest()
                     riga_matricola.string = sha256_hash
 
                 return soup
@@ -113,7 +115,7 @@ def filterLink(soup, url):
                 for row in rows:
                     # facciamo hash della colonna matricola (prima colonna)
                     riga_matricola = row.select_one(".Dati1")
-                    sha256_hash = hashlib.sha256(riga_matricola.string.encode()).hexdigest()
+                    sha256_hash = hashlib.sha256((riga_matricola.string + saltGlobal).encode()).hexdigest()
                     riga_matricola.string = sha256_hash
 
                 return soup
