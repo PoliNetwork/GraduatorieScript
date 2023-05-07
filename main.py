@@ -719,6 +719,9 @@ def itemToString(item):
 
         html += html3 + "\n"
 
+    if html.__contains__("None"):
+        return None
+    
     return html
 
 
