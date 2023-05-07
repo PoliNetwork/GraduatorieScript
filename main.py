@@ -721,7 +721,7 @@ def itemToString(item):
 
     if html.__contains__("None"):
         return None
-    
+
     return html
 
 
