@@ -268,7 +268,7 @@ def executeDownload(url, i2, start2, base_output2, only_first):
     time.sleep(1)
 
     url2 = url[i2]["url"]
-    type ="html"
+    type = "html"
     try:
         type = url[i2]["type"]
     except:
