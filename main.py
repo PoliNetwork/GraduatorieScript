@@ -225,7 +225,7 @@ def directoryOutput(url, base_output2, start_len2, return_first_folder):
             if os.path.isdir(path2):
                 pass
             else:
-                os.makedirs(path2)
+                os.makedirs(path2, exist_ok=True)
 
             j += 1
 
