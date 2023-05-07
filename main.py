@@ -206,13 +206,13 @@ def directoryOutput(url, base_output2, start_len2, return_first_folder):
         url3 = url2.split("/")
 
         if len(url3) == 0:
-            return None
+            return None, None
 
         if url3[0] is None or len(url3[0]) == 0:
             url3.pop(0)
 
         if len(url3) == 0:
-            return None
+            return None, None
 
         path2 = base_output2
         j = 0
