@@ -829,6 +829,15 @@ def getHtml(recent_param, previous_param):
     return html
 
 
+def getYear(elemParam):
+    try:
+        return int(elemParam["year"])
+    except:
+        pass
+
+    return 99999;
+
+
 def sortAndFilter(index_links2):
     #    index_links2.sort(key=lambda x: x["year"], reverse=True)
 
@@ -839,16 +848,13 @@ def sortAndFilter(index_links2):
             if len(s) > 0:
                 listToReturn.append(item)
 
-    a = 0
-    a = a +1
-    return listToReturn
-    pass
+    list.sort(key=getYear, reverse=True)
+    return list
 
 
 def write_index(index_links2, base_output2, index_previous_links):
     # sort
     index_links2 = sortAndFilter(index_links2)
-
 
     i2 = 0
     j = 0
