@@ -201,34 +201,39 @@ def downloadAndAddChildrenUrl1(i2, start2, i_url):
 
 
 def directoryOutput(url, base_output2, start_len2, return_first_folder):
-    url2 = url[start_len2:]
-    url3 = url2.split("/")
+    try:
+        url2 = url[start_len2:]
+        url3 = url2.split("/")
 
-    if len(url3) == 0:
-        return None
+        if len(url3) == 0:
+            return None
 
-    if url3[0] is None or len(url3[0]) == 0:
-        url3.pop(0)
+        if url3[0] is None or len(url3[0]) == 0:
+            url3.pop(0)
 
-    if len(url3) == 0:
-        return None
+        if len(url3) == 0:
+            return None
 
-    path2 = base_output2
-    j = 0
-    while j < (len(url3) - 1):
-        path2 = path2 + "/" + url3[j]
+        path2 = base_output2
+        j = 0
+        while j < (len(url3) - 1):
+            path2 = path2 + "/" + url3[j]
 
-        if return_first_folder:
-            return path2, url3[0]
+            if return_first_folder:
+                return path2, url3[0]
 
-        if os.path.isdir(path2):
-            pass
-        else:
-            os.makedirs(path2)
+            if os.path.isdir(path2):
+                pass
+            else:
+                os.makedirs(path2)
 
-        j += 1
+            j += 1
 
-    return path2 + "/" + url3[len(url3) - 1], url3[0]
+        return path2 + "/" + url3[len(url3) - 1], url3[0]
+    except Exception as ex:
+        print(ex)
+
+    return None, None
 
 
 def downloadAndAddChildrenUrl(url, start2, base_output2, i_url, only_first):
