@@ -1031,26 +1031,26 @@ if __name__ == '__main__':
     while i < len(url_global):
 
         url_global_item = url_global[i]
-
+        url_global_item_url = url_global_item["url"];
         success = -1
-        folder, folder_first = directoryOutput(url_global_item["url"], base_output, start_len, return_first_folder=True)
+        folder, folder_first = directoryOutput(url_global_item_url, base_output, start_len, return_first_folder=True)
         if os.path.isdir(folder):
             files = os.listdir(folder)
             if (files is None or len(files) == 0) or redo == True:
                 success = executeDownload(url_global, i, start, base_output, only_first=False)
             else:
-                list_already_done.append(url_global_item["url"])
-                print("Already done [" + url_global_item["url"] + "]")
+                list_already_done.append(url_global_item_url)
+                print("Already done [" + url_global_item_url + "]")
                 executeDownload(url_global, i, start, base_output, only_first=True)
                 success = 2
         else:
             success = executeDownload(url_global, i, start, base_output, only_first=False)
 
         if success == 1 or success == 2:
-            path = url_global_item["url"][start_len:]
+            path = url_global_item_url[start_len:]
             if "corso" in url_global_item:
                 elem = {
-                    "url": url_global_item["url"],
+                    "url": url_global_item_url,
                     "index": folder,
                     "folder": folder_first,
                     "year": url_global_item["year"],
@@ -1064,7 +1064,7 @@ if __name__ == '__main__':
                     pass
                 elif success == 2:
                     elem = {
-                        "url": url_global_item["url"],
+                        "url": url_global_item_url,
                         "index": folder,
                         "folder": folder_first,
                         "year": url_global_item["year"],
