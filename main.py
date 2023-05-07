@@ -92,10 +92,12 @@ def filterLink(soup, url):
             try:
                 # da rimuovere la colonna matricola
                 tab = soup.find("table", {"class": "TableDati"})
-                soup.select(".HeadColumn1")[1].decompose()
+                #soup.select(".HeadColumn1")[1].decompose()
                 rows = tab.select_one(".TableDati-tbody")
                 for row in rows:
-                    row.select(".Dati1")[1].decompose()
+                    riga_matricola = row.select(".Dati1")[1]
+                    aaaa = 0
+                    aaaa = aaaa +1
 
                 return soup
             except Exception as e10:
@@ -866,6 +868,16 @@ def selectWorkingBaseOutput(base_output_2):
         for b in base_output_2:
             if os.path.exists(b):
                 return b
+            else:
+                done = False
+                try:
+                    os.mkdir(b)
+                    done = True
+                except Exception as ex:
+                    print(ex)
+
+                if done:
+                    return b
 
     return None
     pass
