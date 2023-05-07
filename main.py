@@ -848,8 +848,8 @@ def sortAndFilter(index_links2):
             if len(s) > 0:
                 listToReturn.append(item)
 
-    list.sort(key=getYear, reverse=True)
-    return list
+    listToReturn.sort(key=getYear, reverse=True)
+    return listToReturn
 
 
 def write_index(index_links2, base_output2, index_previous_links):
