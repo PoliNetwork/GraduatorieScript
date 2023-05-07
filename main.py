@@ -230,8 +230,13 @@ def directoryOutput(url, base_output2, start_len2, return_first_folder):
             j += 1
 
         return path2 + "/" + url3[len(url3) - 1], url3[0]
-    except Exception as ex:
-        print(ex)
+    except Exception as ex1:
+        print(ex1)
+
+    try:
+        return path2 + "/" + url3[len(url3) - 1], url3[0]
+    except Exception as ex2:
+        print(ex2)
 
     return None, None
 
