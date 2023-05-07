@@ -1,5 +1,6 @@
 # imports
 import datetime
+import hashlib
 import os
 import sys
 import time
@@ -90,14 +91,14 @@ def filterLink(soup, url):
             return None
         elif "_sotto_" in url and "sotto_indice.html" not in url:
             try:
-                # da rimuovere la colonna matricola
                 tab = soup.find("table", {"class": "TableDati"})
-                #soup.select(".HeadColumn1")[1].decompose()
+                # soup.select(".HeadColumn1")[1].decompose()
                 rows = tab.select_one(".TableDati-tbody")
                 for row in rows:
+                    # facciamo hash della colonna matricola
                     riga_matricola = row.select(".Dati1")[1]
-                    aaaa = 0
-                    aaaa = aaaa +1
+                    sha256_hash = hashlib.sha256(riga_matricola.string.encode()).hexdigest()
+                    riga_matricola.string = sha256_hash
 
                 return soup
             except Exception as e10:
@@ -106,12 +107,14 @@ def filterLink(soup, url):
 
         elif "_grad_" in url and "_M.html" in url:
             try:
-                # da rimuovere la colonna matricola (prima colonna)
                 tab = soup.find("table", {"class": "TableDati"})
-                soup.select_one(".HeadColumn1").decompose()
+                # soup.select_one(".HeadColumn1").decompose()
                 rows = tab.select_one(".TableDati-tbody")
                 for row in rows:
-                    row.select_one(".Dati1").decompose()
+                    # facciamo hash della colonna matricola (prima colonna)
+                    riga_matricola = row.select_one(".Dati1")
+                    sha256_hash = hashlib.sha256(riga_matricola.string.encode()).hexdigest()
+                    riga_matricola.string = sha256_hash
 
                 return soup
 
