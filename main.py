@@ -512,6 +512,7 @@ def generateUrl(start2, bruteforceEnableLocal):
         {"url":
              'https://www.poliorientami.polimi.it/come-si-accede/design/punteggi-esiti-e-graduatorie/',
          "type": "html"},
+        {"url": 'https://www.polimi.it/futuri-studenti', "type": "html"},
         {"url": 'https://www.design.polimi.it/it/lista-news',
          "type": "pdf"}
     ]
