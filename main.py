@@ -189,7 +189,7 @@ def downloadAndAddChildrenUrl1(i2, start2, i_url):
                     if link.startswith(start2):
                         addLink(link)
                     else:
-                        print("Link not valid! " + link + "\n")
+                        pass
                 except Exception as e1:
                     print("Failed to download (01) [" + url + "], " + str(e1))
         except Exception as e3:
