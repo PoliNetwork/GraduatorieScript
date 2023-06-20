@@ -1069,7 +1069,7 @@ if __name__ == '__main__':
     while i < len(url_global):
 
         url_global_item = url_global[i]
-        url_global_item_url = url_global_item["url"];
+        url_global_item_url = url_global_item["url"]
         success = -1
         folder, folder_first = directoryOutput(url_global_item_url, base_output, start_len, return_first_folder=True)
         if folder:
