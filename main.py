@@ -786,7 +786,7 @@ def getYear(elemParam):
     except:
         pass
 
-    return 99999;
+    return 99999
 
 
 def sortAndFilter(index_links2):
