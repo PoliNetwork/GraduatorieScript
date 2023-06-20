@@ -7,6 +7,8 @@ import time
 import traceback
 import urllib.request
 from string import ascii_lowercase
+
+import requests as requests
 from bs4 import BeautifulSoup
 
 try:
@@ -419,56 +421,12 @@ global crawl_links
 crawl_links = []
 
 
-def crawl(start2, url="", i=0, linkStart=None, type_url=None):
-    global crawl_links
+def get_lines_from_url(url):
+    response = requests.get(url)
+    response.raise_for_status()  # Check for any errors during the request
 
-    if i > 2:
-        return []
-    if not url:
-        url = "https://www.polimi.it/in-evidenza"
-
-    url = urljoin(linkStart, url)
-
-    if crawl_links.__contains__(url):
-        return []
-
-    if linkStart is not None:
-        if not str(url).startswith(linkStart):
-            return []
-
-    crawl_links.append(url)
-
-    url_ret = []
-
-    try:
-        soup = BeautifulSoup(urllib.request.urlopen(url), features="html.parser")
-
-        links = []
-        for link in soup.findAll('a'):
-            link_found = link.get('href')
-            if link_found is not None and (not links.__contains__(link_found)):
-                links.append(link_found)
-
-        ZZ = 0
-        for link in links:
-            r1 = crawl(start2, link, i + 1, url, type_url)
-            for r2 in r1:
-                isPresent = getIfPresent(r2, url_ret)
-                if not isPresent:
-                    url_ret.append(r2)
-
-            urljoined = urljoin(url, link)
-            if str(link).startswith(start2) or urljoined.startswith(url):
-                elem2 = {"url": url,
-                         "year": getYearFromString(link),
-                         "type": type_url}
-                isPresent = getIfPresent(elem2, url_ret)
-                if not isPresent:
-                    url_ret.append(elem2)
-    except:
-        pass
-
-    return url_ret
+    lines = response.text.split('\n')
+    return lines
 
 
 def generateUrl(start2, bruteforceEnableLocal):
@@ -506,32 +464,21 @@ def generateUrl(start2, bruteforceEnableLocal):
         elem2 = {"url": single, "year": getYearFromString(m)}
         url_global.append(elem2)
 
-    to_crawl = [
-        {"url": 'https://www.polimi.it/in-evidenza',
-         "type": "html"},
-        {"url":
-             'https://www.poliorientami.polimi.it/come-si-accede/design/punteggi-esiti-e-graduatorie/',
-         "type": "html"},
-        {"url": 'https://www.polimi.it/futuri-studenti', "type": "html"},
-        {"url": 'https://www.design.polimi.it/it/lista-news',
-         "type": "pdf"}
-    ]
+    to_crawl2 = "https://raw.githubusercontent.com/PoliNetworkOrg/GraduatorieScriptCSharp/scraper-output/docs/links.txt"
+    # CRAWL LINKS
+    print("Number of URLs before crawl: " + str(len(url_global)))
+    try:
 
-    for to_crawl2 in to_crawl:
+        listLinks = get_lines_from_url(to_crawl2)
 
-        # CRAWL LINKS
-        print("Number of URLs before crawl " + to_crawl2["url"] + ": " + str(len(url_global)))
-        try:
-            crawled = crawl(start2, to_crawl2["url"], 0, None, to_crawl2["type"])
-            print("Number of URLs crawled " + to_crawl2["url"] + ": " + str(len(crawled)))
+        print("Number of URLs crawled: " + str(len(listLinks)))
 
-            for crawled_single in crawled:
-                isPresent = getIfPresent(crawled_single, url_global)
-                if not isPresent:
-                    url_global.append(crawled_single)
-        except Exception as eCrawl:
-            print("eCrawl " + to_crawl2["url"] + " " + str(eCrawl))
-            pass
+        for crawled_single in listLinks:
+            elem2 = {"url": crawled_single, "year": getYearFromString(crawled_single)}
+            url_global.append(elem2)
+    except Exception as eCrawl:
+        print("eCrawl " + listLinks + " " + str(eCrawl))
+        pass
 
     # PRINT URL TO DOWNLOAD
     print("starting printing url to download")
