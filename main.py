@@ -776,6 +776,11 @@ def getHtml(recent_param, previous_param):
     html += "PoliNetwork"
     html += "</a>\n"
     html += "</h4>\n"
+    html += "<div>\n"
+    html += "<p>\n"
+    html += "<a href='https://polinetworkorg.github.io/preview/PoliNetworkOrg/RankingsBeta/branch/main/'>Beta version</a>\n"
+    html += "</p>\n"
+    html += "</div>\n"
     html += "</body>\n</html>\n"
     return html
 
