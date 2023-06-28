@@ -464,7 +464,7 @@ def generateUrl(start2, bruteforceEnableLocal):
         elem2 = {"url": single, "year": getYearFromString(m)}
         url_global.append(elem2)
 
-    to_crawl2 = "https://raw.githubusercontent.com/PoliNetworkOrg/GraduatorieScriptCSharp/scraper-output/docs/links.txt"
+    to_crawl2 = "https://raw.githubusercontent.com/PoliNetworkOrg/GraduatorieScriptCSharp/main/data/links.txt"
     # CRAWL LINKS
     print("Number of URLs before crawl: " + str(len(url_global)))
     try:
